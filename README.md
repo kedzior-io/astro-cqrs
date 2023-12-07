@@ -167,11 +167,11 @@ and used them all in production environment. So why this?
 
 Well, in all of them I was missing something:
 
-- `MediatR` - a bit of setup + always abstracted a lot in my own wrappers
-- `Wolverine` - it covers a lot more that I need, it uses a lot of dependencies, I could not figure out how to setup the query part. 
-- `FastEndpoints` - its command bus is great but enforces REPR Design Pattern (Request-Endpoint-Response) pattern which I'm not a big fan of.
+- `MediatR` - a bit of setup + always abstracted a lot in my own wrappers.
+- `Wolverine` - it covers a lot more that I need, it uses a lot of dependencies, has an odd way to setup query handler. 
+- `FastEndpoints` - its command bus is amazing but the whole library enforces REPR Design Pattern (Request-Endpoint-Response) which I'm not a big fan of. It also doesn't work for Azure Functions or Blazor.
 
-So I decided to borrow the best parts from them in order to create a setup free in-process messaging mechanism that wires up easily with Minimal API, Azure Functions, Blazor and MVC (if I get to do it soon enough). 
+I decided to borrow the best parts from them in order to create a setup free in-process messaging mechanism that wires up easily with Minimal API, Azure Functions, Blazor and MVC (if I get to do it soon enough). 
 
 It can be seen in production here: [Salarioo.com](https://salarioo.com)
 
