@@ -1,0 +1,9 @@
+{
+  "profiles": {
+    "AstroCqrs.AzureFunctions": {
+      "commandName": "Project",
+      "commandLineArgs": "--port 7280",
+      "launchBrowser": false
+    }
+  }
+}
