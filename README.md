@@ -113,6 +113,13 @@ public static class CreateOrder
 Here are the same query and command used in Azure Functions!
 
 ```csharp
+     services.AddAstroCqrsFromAssemblyContaining<ListOrders.Query>();
+```
+
+☝️ Ah yeah, due to the nature of Azure Functions, we need to point to the assembly where the handlers live
+
+
+```csharp
 public class HttpTriggerFunction
 {
     private readonly ILogger<HttpTriggerFunction> _logger;
