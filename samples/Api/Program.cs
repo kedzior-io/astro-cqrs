@@ -14,15 +14,13 @@ using AstroCqrs.Handlers.Commands;
   6. Inject DbContext
   7. Handler Context
   8. Request Context
+  9. Authorization example //.RequireAuthorization();
 
  */
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddAstroCqrs();
-
-builder.Services.AddAuthentication();
-builder.Services.AddAuthentication();
 
 var app = builder.Build();
 
@@ -33,6 +31,5 @@ app.MapGetHandler<GetOrderById.Query, GetOrderById.Response>("/orders.getById.{i
 app.MapPostHandler<CreateOrder.Command, CreateOrder.Response>("/orders.create");
 
 app.MapPostHandler<ProcessOrders.Command, ProcessOrders.Response>("/orders.process");
-//.RequireAuthorization();
 
 app.Run();

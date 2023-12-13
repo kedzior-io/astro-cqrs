@@ -8,8 +8,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\AstroCqrs.Handlers\AstroCqrs.Handlers.csproj" />
-    <ProjectReference Include="..\AstroCqrs\AstroCqrs.csproj" />
+    <ProjectReference Include="..\..\src\AstroCqrs\AstroCqrs.csproj" />
+    <ProjectReference Include="..\Handlers\Handlers.csproj" />
   </ItemGroup>
 
 </Project>

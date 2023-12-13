@@ -3,13 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.8.34309.116
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AstroCqrs.Api", "src\AstroCqrs.Api\AstroCqrs.Api.csproj", "{4825E3B7-8438-4AB7-8695-0F2B08C99BF0}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AstroCqrs", "src\AstroCqrs\AstroCqrs.csproj", "{D426E63E-4BFE-49FE-AEB3-341599C36374}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AstroCqrs.AzureFunctions", "src\AstroCqrs.AzureFunctions\AstroCqrs.AzureFunctions.csproj", "{DCF9681C-FE08-475C-AFEE-80E30139394E}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "samples", "samples", "{A701A25C-2DA5-4F1C-82B5-880E509CD439}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AstroCqrs.Handlers", "src\AstroCqrs.Handlers\AstroCqrs.Handlers.csproj", "{5A6D7D60-0E58-49C0-9B30-66404D680136}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Handlers", "samples\Handlers\Handlers.csproj", "{C25A219C-A7FC-4A27-868F-68434CBE2746}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Api", "samples\Api\Api.csproj", "{B469B4F3-7FF4-4C56-B17A-1F72DB22BB88}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AzureFunctions", "samples\AzureFunctions\AzureFunctions.csproj", "{51267336-4D68-4FEB-8686-39DB2E340847}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,25 +19,30 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{4825E3B7-8438-4AB7-8695-0F2B08C99BF0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{4825E3B7-8438-4AB7-8695-0F2B08C99BF0}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{4825E3B7-8438-4AB7-8695-0F2B08C99BF0}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{4825E3B7-8438-4AB7-8695-0F2B08C99BF0}.Release|Any CPU.Build.0 = Release|Any CPU
 		{D426E63E-4BFE-49FE-AEB3-341599C36374}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{D426E63E-4BFE-49FE-AEB3-341599C36374}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D426E63E-4BFE-49FE-AEB3-341599C36374}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D426E63E-4BFE-49FE-AEB3-341599C36374}.Release|Any CPU.Build.0 = Release|Any CPU
-		{DCF9681C-FE08-475C-AFEE-80E30139394E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{DCF9681C-FE08-475C-AFEE-80E30139394E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{DCF9681C-FE08-475C-AFEE-80E30139394E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{DCF9681C-FE08-475C-AFEE-80E30139394E}.Release|Any CPU.Build.0 = Release|Any CPU
-		{5A6D7D60-0E58-49C0-9B30-66404D680136}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{5A6D7D60-0E58-49C0-9B30-66404D680136}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{5A6D7D60-0E58-49C0-9B30-66404D680136}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{5A6D7D60-0E58-49C0-9B30-66404D680136}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C25A219C-A7FC-4A27-868F-68434CBE2746}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C25A219C-A7FC-4A27-868F-68434CBE2746}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C25A219C-A7FC-4A27-868F-68434CBE2746}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C25A219C-A7FC-4A27-868F-68434CBE2746}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B469B4F3-7FF4-4C56-B17A-1F72DB22BB88}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B469B4F3-7FF4-4C56-B17A-1F72DB22BB88}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B469B4F3-7FF4-4C56-B17A-1F72DB22BB88}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B469B4F3-7FF4-4C56-B17A-1F72DB22BB88}.Release|Any CPU.Build.0 = Release|Any CPU
+		{51267336-4D68-4FEB-8686-39DB2E340847}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{51267336-4D68-4FEB-8686-39DB2E340847}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{51267336-4D68-4FEB-8686-39DB2E340847}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{51267336-4D68-4FEB-8686-39DB2E340847}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{C25A219C-A7FC-4A27-868F-68434CBE2746} = {A701A25C-2DA5-4F1C-82B5-880E509CD439}
+		{B469B4F3-7FF4-4C56-B17A-1F72DB22BB88} = {A701A25C-2DA5-4F1C-82B5-880E509CD439}
+		{51267336-4D68-4FEB-8686-39DB2E340847} = {A701A25C-2DA5-4F1C-82B5-880E509CD439}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {D4BABEBC-7EB6-4D4F-B618-94AB5497BEDF}

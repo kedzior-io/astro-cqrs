@@ -15,8 +15,8 @@
     <PackageReference Include="Microsoft.Azure.Functions.Worker.ApplicationInsights" Version="1.0.0" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\AstroCqrs.Handlers\AstroCqrs.Handlers.csproj" />
-    <ProjectReference Include="..\AstroCqrs\AstroCqrs.csproj" />
+    <ProjectReference Include="..\..\src\AstroCqrs\AstroCqrs.csproj" />
+    <ProjectReference Include="..\Handlers\Handlers.csproj" />
   </ItemGroup>
   <ItemGroup>
     <None Update="host.json">
