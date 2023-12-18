@@ -65,7 +65,7 @@ public static class MainExtensions
 
                 if (interfaceItem == Types.IValidator)
                 {
-                    var request = discoveredType.GetGenericArgumentsOfType(Types.ValidatorOf1)?[0]!;
+                    // var request = discoveredType.GetGenericArgumentsOfType(Types.ValidatorOf1)?[0]!;
 
                     //if (valDict.TryGetValue(tRequest, out var val))
                     //    val.HasDuplicates = true;

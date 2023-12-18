@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 
-namespace AstroCqrs.Handlers.Commands;
+namespace Handlers.Orders.Commands;
 
 /*
  * An example of a Command with parameters and response

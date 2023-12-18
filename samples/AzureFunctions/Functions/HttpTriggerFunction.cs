@@ -1,4 +1,4 @@
-using AstroCqrs.Handlers.Queries;
+using Handlers.Orders.Queries;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
 using Microsoft.Extensions.Logging;

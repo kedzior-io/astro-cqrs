@@ -1,4 +1,4 @@
-﻿namespace AstroCqrs.Handlers.Queries;
+﻿namespace Handlers.Orders.Queries;
 
 /*
  * An example of a Query with a parameters

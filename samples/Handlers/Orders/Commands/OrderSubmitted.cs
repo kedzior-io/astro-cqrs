@@ -1,4 +1,4 @@
-﻿namespace AstroCqrs.Handlers.Commands;
+﻿namespace Handlers.Orders.Commands;
 
 /*
  * An example of a Command used with Azure Service Bus

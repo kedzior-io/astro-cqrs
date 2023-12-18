@@ -1,7 +1,7 @@
 using AstroCqrs;
 
-using AstroCqrs.Handlers.Queries;
-using AstroCqrs.Handlers.Commands;
+using Handlers.Orders.Queries;
+using Handlers.Orders.Commands;
 
 /*
   TODO:
