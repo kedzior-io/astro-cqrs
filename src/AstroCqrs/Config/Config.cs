@@ -9,7 +9,7 @@ namespace AstroCqrs;
 public sealed class Config
 {
     private static IServiceResolver? _resolver;
-    internal static bool ResolverIsNotSet => _resolver is null;
+    // internal static bool ResolverIsNotSet => _resolver is null;
 
     internal static IServiceResolver ServiceResolver
     {

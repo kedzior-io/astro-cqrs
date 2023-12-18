@@ -15,4 +15,5 @@ internal static class Types
     internal static readonly Type CommandHandlerExecutorOf2 = typeof(CommandHandlerExecutor<,>);
 
     internal static readonly Type IValidator = typeof(IValidator);
+    internal static readonly Type ValidatorOf1 = typeof(AbstractValidator<>);
 }

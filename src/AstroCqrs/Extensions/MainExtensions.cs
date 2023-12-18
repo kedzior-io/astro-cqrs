@@ -20,9 +20,11 @@ public static class MainExtensions
     private static IServiceCollection RegisterAstroCqrs(this IServiceCollection services, Assembly? assembly = null)
     {
         var handlerRegistry = new HandlerRegistry();
+        var validators = new Dictionary<Type, Type>();
 
         services.AddHttpContextAccessor();
         services.AddSingleton(handlerRegistry);
+        services.AddSingleton(validators);
         services.TryAddSingleton<IServiceResolver, ServiceResolver>();
 
         var allAssemblies = Enumerable.Empty<Assembly>();
@@ -52,27 +54,22 @@ public static class MainExtensions
 
         foreach (var discoveredType in discoveredTypes)
         {
-            var interfaces = discoveredType.GetInterfaces();
+            var interfaceTypes = discoveredType.GetInterfaces();
 
-            foreach (var interfaceItem in interfaces)
+            foreach (var interfaceType in interfaceTypes)
             {
-                var generic = interfaceItem.IsGenericType ? interfaceItem.GetGenericTypeDefinition() : null;
+                var genericType = interfaceType.IsGenericType ? interfaceType.GetGenericTypeDefinition() : null;
 
-                if (generic == Types.IMessageHandlerOf1 || generic == Types.IMessageHandlerOf2)
+                if (genericType == Types.IMessageHandlerOf1 || genericType == Types.IMessageHandlerOf2)
                 {
-                    handlerRegistry.TryAdd(interfaceItem.GetGenericArguments()[0], new(discoveredType));
+                    handlerRegistry.TryAdd(interfaceType.GetGenericArguments()[0], new(discoveredType));
                 }
 
-                if (interfaceItem == Types.IValidator)
+                if (interfaceType == Types.IValidator)
                 {
-                    // var request = discoveredType.GetGenericArgumentsOfType(Types.ValidatorOf1)?[0]!;
-
-                    //if (valDict.TryGetValue(tRequest, out var val))
-                    //    val.HasDuplicates = true;
-                    //else
-                    //    valDict.Add(tRequest, new(t, false));
-
-                    continue;
+                    var messageType = discoveredType.GetGenericArgumentsOfType(Types.ValidatorOf1)?[0]!;
+                    validators.Add(messageType, discoveredType);
+                    // services.AddScoped<IValidator<messageType>, discoveredType>();
                 }
             }
         }
@@ -82,9 +79,7 @@ public static class MainExtensions
         var serviceProvider = services.BuildServiceProvider();
 
         Conf.ServiceResolver = serviceProvider.GetRequiredService<IServiceResolver>();
-
-        //services.AddScoped<IValidator<User>, UserValidator>();
-
+        
         return services;
     }
 }
