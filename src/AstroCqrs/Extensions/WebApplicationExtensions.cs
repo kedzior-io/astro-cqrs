@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using Azure;
+using FluentValidation;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 
 namespace AstroCqrs;
@@ -14,18 +16,29 @@ public static class WebApplicationExtensions
     {
         return app.MapPost(pattern, async (TCommand? command, CancellationToken ct) =>
         {
-            // var _validator = Conf.ServiceResolver.CreateSingleton(ValidatorType);
-            // var valResult = await ((IValidator<TRequest>)def.GetValidator()!).ValidateAsync(req, cancellation);
-            
             if (command is not null)
             {
+                await ExecuteValidation(command);
+
                 return await HandlerExtensions.ExecuteAsync(command, ct);
             }
 
             return await HandlerExtensions.ExecuteGenericAsync<TCommand, TResponse>(ct);
         });
     }
-    
+
+    private static async Task ExecuteValidation<TResponse>(IHandlerMessage<TResponse> message)
+    {
+        var messageType = message.GetType();
+
+        var validators = Conf.ServiceResolver.Resolve<ValidatorRegistry>();
+
+        if (validators.TryGetValue(messageType, out var validatorType))
+        {
+            // var validatorResults = ((IValidator)GetValidator(validatorType)!).ValidateAsync(message);
+        }
+    }
+
     //private static async Task ValidateRequest(TMessage message, List<ValidationFailure> validationFailures, CancellationToken cancellation)
     //{
     //    var valResult = await ((IValidator<TRequest>)def.GetValidator()!).ValidateAsync(req, cancellation);
@@ -40,11 +53,12 @@ public static class WebApplicationExtensions
     //        throw new ValidationFailureException(validationFailures, "Request validation failed");
     //}
 
-    //internal object? GetValidator()
-    //{
-    //    if (_validator is null && ValidatorType is not null)
-    //        _validator = Conf.ServiceResolver.CreateSingleton(ValidatorType);
+    internal static object? _validator = null;
 
-    //    return _validator;
-    //}
+    internal static object? GetValidator(Type validatorType)
+    {
+        _validator ??= Conf.ServiceResolver.CreateSingleton(validatorType);
+
+        return _validator;
+    }
 }

@@ -1,5 +1,4 @@
-﻿using FluentValidation;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using System.Reflection;
 
@@ -20,11 +19,11 @@ public static class MainExtensions
     private static IServiceCollection RegisterAstroCqrs(this IServiceCollection services, Assembly? assembly = null)
     {
         var handlerRegistry = new HandlerRegistry();
-        var validators = new Dictionary<Type, Type>();
+        var validatorRegistry = new ValidatorRegistry();
 
         services.AddHttpContextAccessor();
         services.AddSingleton(handlerRegistry);
-        services.AddSingleton(validators);
+        services.AddSingleton(validatorRegistry);
         services.TryAddSingleton<IServiceResolver, ServiceResolver>();
 
         var allAssemblies = Enumerable.Empty<Assembly>();
@@ -68,8 +67,7 @@ public static class MainExtensions
                 if (interfaceType == Types.IValidator)
                 {
                     var messageType = discoveredType.GetGenericArgumentsOfType(Types.ValidatorOf1)?[0]!;
-                    validators.Add(messageType, discoveredType);
-                    // services.AddScoped<IValidator<messageType>, discoveredType>();
+                    validatorRegistry.TryAdd(messageType, discoveredType);
                 }
             }
         }
@@ -79,7 +77,7 @@ public static class MainExtensions
         var serviceProvider = services.BuildServiceProvider();
 
         Conf.ServiceResolver = serviceProvider.GetRequiredService<IServiceResolver>();
-        
+
         return services;
     }
 }

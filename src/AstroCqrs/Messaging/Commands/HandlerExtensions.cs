@@ -1,4 +1,6 @@
-﻿using System.Collections.Concurrent;
+﻿using Azure.Core;
+using FluentValidation;
+using System.Collections.Concurrent;
 
 namespace AstroCqrs;
 
@@ -9,17 +11,18 @@ public static class HandlerExtensions
 {
     public static Task<TResponse> ExecuteAsync<TResponse>(IHandlerMessage<TResponse> message, CancellationToken ct)
     {
-        var tMessage = message.GetType();
+        var messageType = message.GetType();
+
         var registry = Conf.ServiceResolver.Resolve<HandlerRegistry>();
 
-        if (registry.TryGetValue(tMessage, out var def))
+        if (registry.TryGetValue(messageType, out var handlerDefinition))
         {
-            def.HandlerExecutor ??= CreateHandlerExecutor(tMessage);
+            handlerDefinition.HandlerExecutor ??= CreateHandlerExecutor(messageType);
 
-            return ((HandlerExecutorBase<TResponse>)def.HandlerExecutor).Execute(message, def.HandlerType, ct);
+            return ((HandlerExecutorBase<TResponse>)handlerDefinition.HandlerExecutor).Execute(message, handlerDefinition.HandlerType, ct);
         }
 
-        throw new InvalidOperationException($"Unable to create an instance of the handler for command [{tMessage.FullName}]");
+        throw new InvalidOperationException($"Unable to create an instance of the handler for command [{messageType.FullName}]");
 
         static HandlerExecutorBase<TResponse> CreateHandlerExecutor(Type tCommand)
             => (HandlerExecutorBase<TResponse>)

@@ -1,6 +1,6 @@
 ﻿namespace AstroCqrs;
 
-public abstract class QueryHandler<TQuery, TResponse> : /*ValidationContext<TQuery>,*/ IMessageHandler<TQuery, TResponse> where TQuery : IHandlerMessage<TResponse>
+public abstract class QueryHandler<TQuery, TResponse> : /*ValidationContext<TQuery>, */ IMessageHandler<TQuery, TResponse> where TQuery : IHandlerMessage<TResponse>
 {
     protected QueryHandler()
     { }
