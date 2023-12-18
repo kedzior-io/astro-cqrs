@@ -1,6 +1,6 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using FluentValidation;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
-using System.Linq;
 using System.Reflection;
 
 namespace AstroCqrs;
@@ -45,21 +45,34 @@ public static class MainExtensions
                                             Types.IQuery,
                                             Types.ICommand,
                                             Types.IMessageHandler,
+                                            Types.IValidator
                                         }).Any()
                                 )
                                 );
 
-        foreach (var t in discoveredTypes)
+        foreach (var discoveredType in discoveredTypes)
         {
-            var tInterfaces = t.GetInterfaces();
+            var interfaces = discoveredType.GetInterfaces();
 
-            foreach (var tInterface in tInterfaces)
+            foreach (var interfaceItem in interfaces)
             {
-                var tGeneric = tInterface.IsGenericType ? tInterface.GetGenericTypeDefinition() : null;
+                var generic = interfaceItem.IsGenericType ? interfaceItem.GetGenericTypeDefinition() : null;
 
-                if (tGeneric == Types.IMessageHandlerOf1 || tGeneric == Types.IMessageHandlerOf2)
+                if (generic == Types.IMessageHandlerOf1 || generic == Types.IMessageHandlerOf2)
                 {
-                    handlerRegistry.TryAdd(tInterface.GetGenericArguments()[0], new(t));
+                    handlerRegistry.TryAdd(interfaceItem.GetGenericArguments()[0], new(discoveredType));
+                }
+
+                if (interfaceItem == Types.IValidator)
+                {
+                    var request = discoveredType.GetGenericArgumentsOfType(Types.ValidatorOf1)?[0]!;
+
+                    //if (valDict.TryGetValue(tRequest, out var val))
+                    //    val.HasDuplicates = true;
+                    //else
+                    //    valDict.Add(tRequest, new(t, false));
+
+                    continue;
                 }
             }
         }
@@ -69,6 +82,8 @@ public static class MainExtensions
         var serviceProvider = services.BuildServiceProvider();
 
         Conf.ServiceResolver = serviceProvider.GetRequiredService<IServiceResolver>();
+
+        //services.AddScoped<IValidator<User>, UserValidator>();
 
         return services;
     }

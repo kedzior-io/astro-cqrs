@@ -1,6 +1,6 @@
 ﻿namespace AstroCqrs;
 
-public abstract class CommandHandler<TCommand, TResponse> : IMessageHandler<TCommand, TResponse> where TCommand : IHandlerMessage<TResponse>
+public abstract class CommandHandler<TCommand, TResponse> /*: ValidationContext<TCommand>,*/: IMessageHandler<TCommand, TResponse> where TCommand : IHandlerMessage<TResponse>
 {
     protected CommandHandler()
     {

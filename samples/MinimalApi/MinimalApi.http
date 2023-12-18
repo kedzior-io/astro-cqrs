@@ -1,6 +1,6 @@
 @AstroCqrs.Api_HostAddress = http://localhost:5259
 
-GET {{AstroCqrs.Api_HostAddress}}/orders.list/
+GET {{MinimalApi.Api_HostAddress}}/orders.list/
 Accept: application/json
 
 ###

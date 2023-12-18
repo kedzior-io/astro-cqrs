@@ -7,6 +7,10 @@
     <InvariantGlobalization>true</InvariantGlobalization>
   </PropertyGroup>
 
+  <ItemGroup> 
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
+  </ItemGroup>
+
   <ItemGroup>
     <ProjectReference Include="..\..\src\AstroCqrs\AstroCqrs.csproj" />
     <ProjectReference Include="..\Handlers\Handlers.csproj" />

@@ -15,10 +15,14 @@ using AstroCqrs.Handlers.Commands;
   7. Handler Context
   8. Request Context
   9. Authorization example //.RequireAuthorization();
+  10. Handler Response
 
  */
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
 
 builder.Services.AddAstroCqrs();
 
@@ -31,5 +35,11 @@ app.MapGetHandler<GetOrderById.Query, GetOrderById.Response>("/orders.getById.{i
 app.MapPostHandler<CreateOrder.Command, CreateOrder.Response>("/orders.create");
 
 app.MapPostHandler<ProcessOrders.Command, ProcessOrders.Response>("/orders.process");
+
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI();
+}
 
 app.Run();
