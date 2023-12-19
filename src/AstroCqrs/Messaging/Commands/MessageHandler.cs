@@ -1,6 +1,6 @@
 ﻿namespace AstroCqrs;
 
-public abstract class MessageHandlerBase<TCommand> : ValidationContext<TCommand>
+public abstract class MessageHandlerBase<TCommand> // : ValidationContext<TCommand>
 { }
 
 public abstract class MessageHandler<TMessage> : MessageHandlerBase<TMessage>, IMessageHandler<TMessage> where TMessage : IHandlerMessage

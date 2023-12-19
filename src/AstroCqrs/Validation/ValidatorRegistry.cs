@@ -1,4 +1,5 @@
-﻿using System.Collections.Concurrent;
+﻿using Azure;
+using System.Collections.Concurrent;
 
 namespace AstroCqrs;
 
