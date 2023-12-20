@@ -27,7 +27,7 @@ public static class HandlerExtensions
                 Conf.ServiceResolver.CreateSingleton(Types.CommandHandlerExecutorOf2.MakeGenericType(tCommand, typeof(TResponse)));
     }
 
-    public static Task<TResponse> ExecuteGenericAsync<TMessage, TResponse>(CancellationToken ct) where TMessage : IHandlerMessage<TResponse>
+    public static Task<TResponse> ExecuteWithEmptyMessageAsync<TMessage, TResponse>(CancellationToken ct) where TMessage : IHandlerMessage<TResponse>
     {
         var message = Activator.CreateInstance<TMessage>();
         return ExecuteAsync(message, ct);

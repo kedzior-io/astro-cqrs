@@ -9,7 +9,7 @@ namespace Handlers.Orders.Commands;
 public static class CreateOrder
 {
     public sealed record Command(string CustomerName, decimal Total) : ICommand<Response>;
-    public sealed record Response(Guid OrderId);
+    public sealed record Response(Guid OrderId, string SomeValue);
 
     public sealed class CommandValidator : Validator<Command>
     {
@@ -30,7 +30,7 @@ public static class CreateOrder
         public override async Task<Response> ExecuteAsync(Command command, CancellationToken ct)
         {
             var orderId = await Task.FromResult(Guid.NewGuid());
-            return new Response(orderId);
+            return new Response(orderId, $"{command.CustomerName}");
         }
     }
 }

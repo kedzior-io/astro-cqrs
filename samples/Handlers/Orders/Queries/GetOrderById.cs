@@ -13,7 +13,7 @@ public static class GetOrderById
 
     public record Response(OrderModel Order);
 
-    public record OrderModel(Guid Id, string CustomerName, decimal Total);
+    public record OrderModel(string Id, string CustomerName, decimal Total);
 
     public class Handler : QueryHandler<Query, Response>
     {
@@ -23,7 +23,7 @@ public static class GetOrderById
 
         public override async Task<Response> ExecuteAsync(Query query, CancellationToken ct)
         {
-            var order = await Task.FromResult(new OrderModel(Guid.NewGuid(), "Gavin Belson", 20));
+            var order = await Task.FromResult(new OrderModel(query.Id, "Gavin Belson", 20));
 
             return new Response(order);
         }

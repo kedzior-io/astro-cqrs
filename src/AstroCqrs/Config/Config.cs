@@ -12,5 +12,5 @@ public sealed class Config
         set => _resolver = value;
     }
 
-    internal static readonly ValidationOptions ValOpts = new();
+    //internal static readonly ValidationOptions ValOpts = new();
 }

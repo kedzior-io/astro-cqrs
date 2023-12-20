@@ -1,9 +1,9 @@
 ﻿using System.Text.Json.Serialization;
 using System.Text.Json;
 
-namespace AstroCqrs.AzureFunctions;
+namespace AzureFunctions.Configuration;
 
-public static class JsonOptions
+public static class CustomJsonOptions
 {
     public static readonly JsonSerializerOptions Defaults = new()
     {

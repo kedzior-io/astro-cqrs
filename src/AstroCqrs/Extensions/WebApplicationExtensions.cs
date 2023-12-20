@@ -1,5 +1,7 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using Azure;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
+using System.Net;
 
 namespace AstroCqrs;
 
@@ -9,9 +11,7 @@ public static class WebApplicationExtensions
     {
         return app.MapGet(pattern, async ([AsParameters] TQuery query, CancellationToken ct) =>
         {
-            await ValidationExtensions.ExecuteValidationAsync(query);
-
-            return await HandlerExtensions.ExecuteAsync(query, ct);
+            return await ExecuteHandlerAsync(query, ct);
         });
     }
 
@@ -21,12 +21,22 @@ public static class WebApplicationExtensions
         {
             if (command is not null)
             {
-                await ValidationExtensions.ExecuteValidationAsync(command);
-
-                return await HandlerExtensions.ExecuteAsync(command, ct);
+                return await ExecuteHandlerAsync(command, ct);
             }
 
-            return await HandlerExtensions.ExecuteGenericAsync<TCommand, TResponse>(ct);
+            return Results.Ok(await HandlerExtensions.ExecuteWithEmptyMessageAsync<TCommand, TResponse>(ct));
         });
+    }
+
+    private static async Task<IResult> ExecuteHandlerAsync<TResponse>(IHandlerMessage<TResponse> message, CancellationToken ct)
+    {
+        var validationResult = await ValidationExtensions.ExecuteValidationAsync(message);
+
+        if (validationResult is not null)
+        {
+            return Results.ValidationProblem(validationResult, statusCode: (int)HttpStatusCode.BadRequest);
+        }
+
+        return Results.Ok(await HandlerExtensions.ExecuteAsync(message, ct));
     }
 }

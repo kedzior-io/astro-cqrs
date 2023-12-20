@@ -1,16 +1,17 @@
-using Microsoft.Azure.Functions.Worker;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Azure.Core.Serialization;
 using AstroCqrs;
 using Handlers.Orders.Queries;
+using AzureFunctions.Configuration;
 
 var host = new HostBuilder()
-    .ConfigureFunctionsWorkerDefaults()
+    .ConfigureFunctionsWorkerDefaults(builder =>
+    {
+        builder.Serializer = new JsonObjectSerializer(CustomJsonOptions.Defaults);
+    })
     .ConfigureServices(services =>
     {
-        services.AddApplicationInsightsTelemetryWorkerService();
-        services.ConfigureFunctionsApplicationInsights();
-        // TODO: Any way to avoid that?
+        // TODO: Looking for a better way to find and register handlers
         services.AddAstroCqrsFromAssemblyContaining<ListOrders.Query>();
     })
     .Build();
