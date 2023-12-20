@@ -41,7 +41,7 @@ app.MapGetHandler<GetOrderById.Query, GetOrderById.Response>("/orders.getById.{i
 ☝️ Simple: we are telling what's the input, the output and the path. 
 
 
-2. Create a `query`
+2. Create a `Query`
 
 ```csharp
 public static class GetOrderById
@@ -83,7 +83,7 @@ public static class GetOrderById
 app.MapPostHandler<CreateOrder.Command, CreateOrder.Response>("/orders.create");
 ```
 
-1. Create a command:
+1. Create a `Command`:
 
 ```csharp
 public static class CreateOrder
@@ -125,7 +125,7 @@ public static class CreateOrder
 Here are the same query and command used in Azure Functions!
 
 ```csharp
-     services.AddAstroCqrsFromAssemblyContaining<ListOrders.Query>();
+services.AddAstroCqrsFromAssemblyContaining<ListOrders.Query>();
 ```
 
 ☝️ Ah yeah, due to the nature of Azure Functions, we need to point to the assembly where the handlers live
@@ -173,7 +173,14 @@ Well, in all of them I was missing something:
 - `Wolverine` - it covers a lot more that I need, it uses a lot of dependencies, has an odd way to setup query handler. 
 - `FastEndpoints` - its command bus is amazing but the whole library enforces REPR Design Pattern (Request-Endpoint-Response) which I'm not a big fan of. It also doesn't work for Azure Functions or Blazor.
 
-I decided to borrow the best features from existing frameworks to create a setup-free, in-process messaging mechanism. This mechanism easily integrates with Minimal API, Azure Functions, Blazor, MVC, or Console apps. At the same time, it remains independent, reusable, and testable.
+I decided to borrow the best features from existing frameworks to create an in-process messaging mechanism that features:
+
+- Easy setup
+- Decoupled and reusable handlers
+- Enforced consistency
+- Built-in validation
+- Out-of-the-box compatibility with multiple project types (including Minimal API, Azure Functions, Console, MVC, Blazor)
+- Unit testability
 
 It can be seen in production here: [Salarioo.com](https://salarioo.com)
 
@@ -194,3 +201,8 @@ There are few things to work out here and mainly:
 ## Contributing
 
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
+
+## Questions, feature requests
+
+- [Twitter](https://twitter.com/KedziorArtur)
+- [Discord](https://discord.gg/j3vmcaZG)
