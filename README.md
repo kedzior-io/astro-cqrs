@@ -1,5 +1,7 @@
 # Astro CQRS
 
+![Astro.CQRS](https://raw.githubusercontent.com/kedzior-io/astro-cqrs/main/astrocqrs.jpg)
+
 Astro CQRS is a developer friendly alternative mediator implementation to [MediatR](https://github.com/jbogard/MediatR).
 
 In-process messaging with no dependencies that allows to take decoupled, command driven approach.
