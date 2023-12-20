@@ -1,4 +1,3 @@
-using System;
 using AstroCqrs;
 using Handlers.Orders.Commands;
 

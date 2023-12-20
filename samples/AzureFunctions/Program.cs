@@ -1,7 +1,8 @@
-using Microsoft.Extensions.Hosting;
-using Azure.Core.Serialization;
 using AstroCqrs;
+using Azure.Core.Serialization;
 using Handlers.Orders.Queries;
+
+using Microsoft.Extensions.Hosting;
 
 var host = new HostBuilder()
     .ConfigureFunctionsWorkerDefaults(builder =>

@@ -2,7 +2,7 @@ using System.Linq.Expressions;
 
 namespace AstroCqrs;
 
-static class ReflectionExtensions
+internal static class ReflectionExtensions
 {
     internal static IEnumerable<string> PropNames<T>(this Expression<Func<T, object>> expression)
     {

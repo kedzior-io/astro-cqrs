@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-
-namespace AstroCqrs;
+﻿namespace AstroCqrs;
 
 internal static class CtxKey
 {
