@@ -1,16 +1,16 @@
-//using Handlers.Orders.Commands;
+using Handlers.Orders.Commands;
 
-//namespace AstroCqrs.AzureFunctions;
+namespace AstroCqrs.AzureFunctions;
 
-///*
-// * An example of reusing a Command in ServiceBus Trigger Azure Function
-//*/
+/*
+ * An example of reusing a Command in ServiceBus Trigger Azure Function
+*/
 
-//public class ServiceBusFunction
-//{
-//    [Function(nameof(ServiceBusFunction))]
-//    public async Task Run([ServiceBusTrigger("order-submitted", Connection = "ConnectionStrings:ServiceBus")] string json, FunctionContext context)
-//    {
-//        await AzureFunctionExtensions.ExecuteServiceBusAsync<OrderSubmitted.Command, OrderSubmitted.Response>(json, CustomJsonOptions.Defaults, context);
-//    }
-//}
+public class ServiceBusFunction
+{
+    [Function(nameof(ServiceBusFunction))]
+    public async Task Run([ServiceBusTrigger("order-submitted", Connection = "ConnectionStrings:ServiceBus")] string json, FunctionContext context)
+    {
+        await AzureFunctionExtensions.ExecuteServiceBusAsync<OrderSubmitted.Command, OrderSubmitted.Response>(json, CustomJsonOptions.Defaults, context);
+    }
+}

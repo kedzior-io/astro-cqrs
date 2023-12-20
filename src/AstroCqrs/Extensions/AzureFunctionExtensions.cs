@@ -77,6 +77,11 @@ public static class AzureFunctionExtensions
         await HandlerExtensions.ExecuteAsync(message, context.CancellationToken);
     }
 
+    public static async Task ExecuteTimerAsync<TCommand, TResponse>(FunctionContext context) where TCommand : IHandlerMessage<TResponse>
+    {
+        await HandlerExtensions.ExecuteWithEmptyMessageAsync<TCommand, TResponse>(context.CancellationToken);
+    }
+
     private static async Task<HttpResponseData> Success(HttpRequestData request, object? payload)
     {
         var response = request.CreateResponse(HttpStatusCode.OK);

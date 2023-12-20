@@ -1,16 +1,17 @@
 # Astro CQRS
 
-An alternative mediator implementation to [MediatR](https://github.com/jbogard/MediatR).
+Astro CQRS is a developer friendly alternative mediator implementation to [MediatR](https://github.com/jbogard/MediatR).
 
 In-process messaging with no dependencies that allows to take decoupled, command driven approach.
 
 It is designed to be used with:
 
-- .net 7
+- .NET 7
 - Minimal API
-- Azure Functions
-- Blazor
-
+- Azure Functions (HttpTrigger, ServiceBusTrigger and TimeTrigger)
+- Blazor (todo)
+- Console app (todo)
+- MVC (todo)
 
 ## Usage
 
@@ -88,7 +89,18 @@ app.MapPostHandler<CreateOrder.Command, CreateOrder.Response>("/orders.create");
 public static class CreateOrder
 {
     public sealed record Command(string CustomerName, decimal Total) : ICommand<Response>;
+    
     public record Response(Guid OrderId);
+
+    public sealed class Validator : Validator<Command>
+    {
+        public Validator()
+        {
+            RuleFor(x => x.CustomerName)
+                .NotNull()
+                .NotEmpty();
+        }
+    }
 
     public sealed class Handler : CommandHandler<Command, Response>
     {
@@ -99,13 +111,13 @@ public static class CreateOrder
         public override async Task<Response> ExecuteAsync(Command command, CancellationToken ct)
         {
             var orderId = await Task.FromResult(Guid.NewGuid());
-            return new Response(orderId);
+            return new Response(orderId, $"{command.CustomerName}");
         }
     }
 }
 ```
 
-☝️ Simple: Same as above + the command can be flexible and return a response (it's mandatory, it can be fire & forget)
+☝️ Simple: Same as above + the command can be flexible and return a response
 
 
 ## Azure Functions
@@ -122,17 +134,10 @@ Here are the same query and command used in Azure Functions!
 ```csharp
 public class HttpTriggerFunction
 {
-    private readonly ILogger<HttpTriggerFunction> _logger;
-
-    public HttpTriggerFunction(ILogger<HttpTriggerFunction> logger)
-    {
-        _logger = logger;
-    }
-
     [Function(nameof(HttpTriggerFunction))]
     public async Task<HttpResponseData> Run([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post")] HttpRequestData req)
     {
-        return await AzureFunctionExtensions.ExecuteAsync<GetOrderById.Query, GetOrderById.Response>(req);
+        return await AzureFunctionExtensions.ExecuteHttpPostAsync<GetOrderById.Query, GetOrderById.Response>(req);
     }
 }
 ```
@@ -141,20 +146,17 @@ public class HttpTriggerFunction
 ```csharp
 public class ServiceBusFunction
 {
-    private readonly ILogger<ServiceBusFunction> _logger;
-
-    public ServiceBusFunction(ILogger<ServiceBusFunction> logger)
-    {
-        _logger = logger;
-    }
-
     [Function(nameof(ServiceBusFunction))]
     public async Task Run([ServiceBusTrigger("created-order", Connection = "ConnectionStrings:ServiceBus")] string json, FunctionContext context)
     {
-        await AzureFunctionExtensions.ExecuteAsync<CreateOrder.Command, CreateOrder.Response>(json, JsonOptions.Defaults, context);
+        await AzureFunctionExtensions.ExecuteServiceBusAsync<CreateOrder.Command, CreateOrder.Response>(json, JsonOptions.Defaults, context);
     }
 }
 ```
+
+## Sample Code
+
+Check samples available in this repo. 
 
 ## Motives
 
@@ -171,7 +173,7 @@ Well, in all of them I was missing something:
 - `Wolverine` - it covers a lot more that I need, it uses a lot of dependencies, has an odd way to setup query handler. 
 - `FastEndpoints` - its command bus is amazing but the whole library enforces REPR Design Pattern (Request-Endpoint-Response) which I'm not a big fan of. It also doesn't work for Azure Functions or Blazor.
 
-I decided to borrow the best parts from them in order to create a setup free in-process messaging mechanism that wires up easily with Minimal API, Azure Functions, Blazor and MVC (if I get to do it soon enough). 
+I decided to borrow the best features from existing frameworks to create a setup-free, in-process messaging mechanism. This mechanism easily integrates with Minimal API, Azure Functions, Blazor, MVC, or Console apps. At the same time, it remains independent, reusable, and testable.
 
 It can be seen in production here: [Salarioo.com](https://salarioo.com)
 
@@ -180,14 +182,14 @@ It can be seen in production here: [Salarioo.com](https://salarioo.com)
 
 There are few things to work out here and mainly:
 
-- add Command automatic valiadtion using FluentValidation
-- add customizing Handler to inject DbContext
-- add Handler Context
-- add Request Context
-- add authorization example
-- add Blazor example
-- add unit test example
-- add integration test example
+- Customizing Handler to inject EF DbContext
+- Handler Context - lazy load services needed in the most handlers aka DbContext, in memory cache etc. 
+- Request Context - easily access request header values: country code, user ID etc
+- Authorization example
+- Blazor example
+- Unit test example
+- Integration test example
+- Benchmarks
 
 ## Contributing
 

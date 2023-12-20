@@ -11,9 +11,9 @@ public static class CreateOrder
     public sealed record Command(string CustomerName, decimal Total) : ICommand<Response>;
     public sealed record Response(Guid OrderId, string SomeValue);
 
-    public sealed class CommandValidator : Validator<Command>
+    public sealed class Validator : Validator<Command>
     {
-        public CommandValidator()
+        public Validator()
         {
             RuleFor(x => x.CustomerName)
                 .NotNull()

@@ -1,4 +1,6 @@
-﻿namespace Handlers.Orders.Commands;
+﻿using FluentValidation;
+
+namespace Handlers.Orders.Commands;
 
 /*
  * An example of a Command used with Azure Service Bus
@@ -7,6 +9,16 @@
 public static class OrderSubmitted
 {
     public sealed record Command(string Id) : ICommand<Response>;
+
+    public sealed class HandlerValidator : Validator<Command>
+    {
+        public HandlerValidator()
+        {
+            RuleFor(x => x.Id)
+                .NotEmpty();
+        }
+    }
+
     public record Response(string Message);
 
     public sealed class Handler : CommandHandler<Command, Response>
