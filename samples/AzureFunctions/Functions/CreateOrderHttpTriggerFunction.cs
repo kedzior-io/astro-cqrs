@@ -1,4 +1,3 @@
-using AzureFunctions.Configuration;
 using Handlers.Orders.Commands;
 
 namespace AstroCqrs.AzureFunctions;

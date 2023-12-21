@@ -3,5 +3,5 @@
 public interface IHandlerMessage
 { }
 
-public interface IHandlerMessage<out TResult>
+public interface IHandlerMessage<out TResponse>
 { }

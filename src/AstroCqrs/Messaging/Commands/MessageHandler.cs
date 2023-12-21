@@ -3,7 +3,7 @@
 public abstract class MessageHandlerBase<TCommand> // : ValidationContext<TCommand>
 { }
 
-public abstract class MessageHandler<TMessage> : MessageHandlerBase<TMessage>, IMessageHandler<TMessage> where TMessage : IHandlerMessage
+public abstract class MessageHandler<TMessage> : MessageHandlerBase<TMessage>, IHandler<TMessage> where TMessage : IHandlerMessage
 {
     /// <inheritdoc />
     public abstract Task ExecuteAsync(TMessage command, CancellationToken ct = default);

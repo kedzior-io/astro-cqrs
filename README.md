@@ -1,6 +1,9 @@
 # Astro CQRS
 
+![Nuget](https://img.shields.io/nuget/v/AstroCqrs)
+
 ![Astro.CQRS](https://raw.githubusercontent.com/kedzior-io/astro-cqrs/main/astrocqrs.jpg)
+
 
 Astro CQRS is a developer friendly alternative mediator implementation to [MediatR](https://github.com/jbogard/MediatR).
 
@@ -20,10 +23,8 @@ It is designed to be used with:
 1. Install:
 
 ```csharp
-// dotnet install Astro.Cqrs
+dotnet install AstroCqrs
 ```
-
-☝️ Ah yeah that's not on NuGet yet.
 
 
 2. Configure :

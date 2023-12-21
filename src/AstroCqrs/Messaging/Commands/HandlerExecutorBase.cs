@@ -8,7 +8,7 @@ internal abstract class HandlerExecutorBase
 internal sealed class CommandHandlerExecutor<TCommand> : HandlerExecutorBase where TCommand : IHandlerMessage
 {
     internal override Task Execute(IHandlerMessage command, Type tCommandHandler, CancellationToken ct)
-        => ((IMessageHandler<TCommand>)Conf.ServiceResolver.CreateInstance(tCommandHandler)).ExecuteAsync((TCommand)command, ct);
+        => ((IHandler<TCommand>)Conf.ServiceResolver.CreateInstance(tCommandHandler)).ExecuteAsync((TCommand)command, ct);
 }
 
 internal abstract class HandlerExecutorBase<TResult>
