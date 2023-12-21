@@ -1,6 +1,6 @@
 # Astro CQRS
 
-![Nuget](https://img.shields.io/nuget/v/AstroCqrs)
+![Nuget](https://img.shields.io/nuget/v/AstroCQRS?link=https%3A%2F%2Fwww.nuget.org%2Fpackages%2FAstroCqrs%2F)
 
 ![Astro.CQRS](https://raw.githubusercontent.com/kedzior-io/astro-cqrs/main/astrocqrs.jpg)
 
@@ -23,7 +23,7 @@ It is designed to be used with:
 1. Install:
 
 ```csharp
-dotnet install AstroCqrs
+dotnet add package AstroCqrs  
 ```
 
 
