@@ -9,7 +9,7 @@ public abstract class MessageHandler<TMessage> : MessageHandlerBase<TMessage>, I
     public abstract Task ExecuteAsync(TMessage command, CancellationToken ct = default);
 }
 
-public abstract class MessageHandler<TMessage, TResult> : MessageHandlerBase<TMessage>, IMessageHandler<TMessage, TResult>
+public abstract class MessageHandler<TMessage, TResult> : MessageHandlerBase<TMessage>, IHandler<TMessage, TResult>
     where TMessage : IHandlerMessage<TResult>
 {
     /// <inheritdoc />

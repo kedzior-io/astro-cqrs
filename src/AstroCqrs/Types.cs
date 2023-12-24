@@ -10,7 +10,7 @@ internal static class Types
     internal static readonly Type IMessageHandler = typeof(IHandler);
     internal static readonly Type IMessageHandlerOf1 = typeof(IHandler<>);
 
-    internal static readonly Type IMessageHandlerOf2 = typeof(IMessageHandler<,>);
+    internal static readonly Type IMessageHandlerOf2 = typeof(IHandler<,>);
     internal static readonly Type CommandHandlerExecutorOf1 = typeof(CommandHandlerExecutor<>);
     internal static readonly Type CommandHandlerExecutorOf2 = typeof(CommandHandlerExecutor<,>);
 

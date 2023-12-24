@@ -33,6 +33,8 @@ app.MapGetHandler<GetOrderById.Query, GetOrderById.Response>("/orders.getById.{i
 
 app.MapGetHandler<GetOrderByTotal.Query, GetOrderByTotal.Response>("/orders.getByTotal.{totalValue}");
 
+app.MapGetHandler<GetOrderByCustomerId.Query, GetOrderByCustomerId.Response>("/orders.getOrderByCustomerId.{id}");
+
 app.MapPostHandler<CreateOrder.Command, CreateOrder.Response>("/orders.create");
 
 app.MapPostHandler<ProcessOrders.Command, ProcessOrders.Response>("/orders.process");

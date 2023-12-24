@@ -6,11 +6,11 @@ namespace AstroCqrs.AzureFunctions;
 * An example of reusing a Query in HttpTrigger Azure Function
 */
 
-public class GetOrderByIdHttpTriggerFunction
+public class HttpTriggerExample3Function
 {
-    [Function(nameof(GetOrderByIdHttpTriggerFunction))]
+    [Function(nameof(HttpTriggerExample3Function))]
     public async Task<HttpResponseData> Run([HttpTrigger(AuthorizationLevel.Anonymous, "get")] HttpRequestData req)
     {
-        return await AzureFunctionExtensions.ExecuteHttpGetAsync<GetOrderById.Query, GetOrderById.Response>(req, CustomJsonOptions.Defaults);
+        return await AzureFunction.ExecuteHttpGetAsync<ListOrders.Query, ListOrders.Response>(req, CustomJsonOptions.Defaults);
     }
 }

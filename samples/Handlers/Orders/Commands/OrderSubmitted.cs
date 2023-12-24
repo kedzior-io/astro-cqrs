@@ -8,11 +8,11 @@ namespace Handlers.Orders.Commands;
 
 public static class OrderSubmitted
 {
-    public sealed record Command(string Id) : ICommand<Response>;
+    public sealed record Command(string Id) : ICommand<IHandlerResponse<Response>>;
 
-    public sealed class HandlerValidator : Validator<Command>
+    public sealed class OrderSubmittedValidator : Validator<Command>
     {
-        public HandlerValidator()
+        public OrderSubmittedValidator()
         {
             RuleFor(x => x.Id)
                 .NotEmpty();
@@ -27,10 +27,12 @@ public static class OrderSubmitted
         {
         }
 
-        public override async Task<Response> ExecuteAsync(Command command, CancellationToken ct)
+        public override async Task<IHandlerResponse<Response>> ExecuteAsync(Command command, CancellationToken ct)
         {
             var message = await Task.FromResult("Order confirmation email sent");
-            return new Response(message);
+            var response = new Response(message);
+
+            return Success(response);
         }
     }
 }

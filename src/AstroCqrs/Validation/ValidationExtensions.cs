@@ -31,7 +31,7 @@ internal static class ValidationExtensions
 
     internal static IValidator GetValidator(Type validatorType)
     {
-        _validator ??= (IValidator)Conf.ServiceResolver.CreateSingleton(validatorType);
+        _validator = (IValidator)Conf.ServiceResolver.CreateSingleton(validatorType);
         return _validator;
     }
 }

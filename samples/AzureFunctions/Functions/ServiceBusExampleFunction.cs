@@ -6,11 +6,11 @@ namespace AstroCqrs.AzureFunctions;
  * An example of reusing a Command in ServiceBus Trigger Azure Function
 */
 
-public class ServiceBusFunction
+public class ServiceBusExampleFunction
 {
-    [Function(nameof(ServiceBusFunction))]
+    [Function(nameof(ServiceBusExampleFunction))]
     public async Task Run([ServiceBusTrigger("order-submitted", Connection = "ConnectionStrings:ServiceBus")] string json, FunctionContext context)
     {
-        await AzureFunctionExtensions.ExecuteServiceBusAsync<OrderSubmitted.Command, OrderSubmitted.Response>(json, CustomJsonOptions.Defaults, context);
+        await AzureFunction.ExecuteServiceBusAsync<OrderSubmitted.Command, OrderSubmitted.Response>(json, CustomJsonOptions.Defaults, context);
     }
 }

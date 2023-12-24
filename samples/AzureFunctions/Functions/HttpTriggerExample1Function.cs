@@ -6,11 +6,11 @@ namespace AstroCqrs.AzureFunctions;
 * An example of reusing a Command in HttpTrigger Azure Function
 */
 
-public class CreateOrderHttpTriggerFunction
+public class HttpTriggerExample1Function
 {
-    [Function(nameof(CreateOrderHttpTriggerFunction))]
+    [Function(nameof(HttpTriggerExample1Function))]
     public async Task<HttpResponseData> Run([HttpTrigger(AuthorizationLevel.Anonymous, "post")] HttpRequestData req)
     {
-        return await AzureFunctionExtensions.ExecuteHttpPostAsync<CreateOrder.Command, CreateOrder.Response>(req, CustomJsonOptions.Defaults);
+        return await AzureFunction.ExecuteHttpPostAsync<CreateOrder.Command, CreateOrder.Response>(req, CustomJsonOptions.Defaults);
     }
 }

@@ -6,7 +6,7 @@
 
 public static class GetOrderById
 {
-    public class Query : IQuery<Response>
+    public class Query : IQuery<IHandlerResponse<Response>>
     {
         public string Id { get; set; } = "";
     }
@@ -21,11 +21,11 @@ public static class GetOrderById
         {
         }
 
-        public override async Task<Response> ExecuteAsync(Query query, CancellationToken ct)
+        public override async Task<IHandlerResponse<Response>> ExecuteAsync(Query query, CancellationToken ct)
         {
             var order = await Task.FromResult(new OrderModel(query.Id, "Gavin Belson", 20));
 
-            return new Response(order);
+            return Success(new Response(order));
         }
     }
 }
