@@ -2,15 +2,15 @@ namespace AstroCqrs;
 
 internal class HandlerResponse : IHandlerResponse
 {
-    public bool IsSuccess { get; protected set; } = true;
+    public bool IsSuccess { get; protected init; } = true;
     public bool IsFailure => !IsSuccess;
-    public string Message { get; protected set; } = string.Empty;
+    public string Message { get; protected init; } = string.Empty;
 
     internal HandlerResponse()
     {
     }
 
-    internal HandlerResponse(string message)
+    private HandlerResponse(string message)
     {
         IsSuccess = false;
         Message = message;
@@ -29,19 +29,17 @@ internal class HandlerResponse : IHandlerResponse
 
 internal sealed class HandlerResponse<TResponse> : HandlerResponse, IHandlerResponse<TResponse>
 {
-    internal HandlerResponse(TResponse payload)
+    private HandlerResponse(TResponse payload)
     {
         Payload = payload;
     }
-
-    // TODO: Payload must containb non-nullable
-    internal HandlerResponse(string message)
+    private HandlerResponse(string message)
     {
         IsSuccess = false;
         Message = message;
     }
 
-    public TResponse Payload { get; private set; }
+    public TResponse? Payload { get; }
 
     internal static IHandlerResponse<TResponse> CreateSuccess(TResponse payload)
     {

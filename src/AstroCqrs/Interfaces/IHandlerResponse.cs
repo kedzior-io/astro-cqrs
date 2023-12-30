@@ -1,4 +1,4 @@
-namespace AstroCqrs;
+﻿namespace AstroCqrs;
 
 public interface IHandlerResponse
 {
@@ -9,5 +9,5 @@ public interface IHandlerResponse
 
 public interface IHandlerResponse<out TResponse> : IHandlerResponse
 {
-    TResponse Payload { get; }
+    TResponse? Payload { get; }
 }

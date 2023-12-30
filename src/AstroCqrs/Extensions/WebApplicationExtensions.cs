@@ -41,10 +41,7 @@ public static class WebApplicationExtensions
 
     public static RouteHandlerBuilder MapGetHandler<TQuery, TResponse>(this WebApplication app, string pattern) where TQuery : IHandlerMessage<IHandlerResponse<TResponse>>
     {
-        return app.MapGet(pattern, async ([AsParameters] TQuery query, CancellationToken ct) =>
-        {
-            return await ExecuteHandlerAsync(query, ct);
-        });
+        return app.MapGet(pattern, async ([AsParameters] TQuery query, CancellationToken ct) => await ExecuteHandlerAsync(query, ct));
     }
 
     public static RouteHandlerBuilder MapPostHandler<TCommand, TResponse>(this WebApplication app, string pattern) where TCommand : IHandlerMessage<IHandlerResponse<TResponse>>
@@ -58,7 +55,7 @@ public static class WebApplicationExtensions
 
             var response = await HandlerExtensions.ExecuteWithEmptyMessageAsync<TCommand, IHandlerResponse<TResponse>>(ct);
 
-            return Results.Ok(response);
+            return CreateResponse(response);
         });
     }
 
@@ -73,6 +70,8 @@ public static class WebApplicationExtensions
 
         var response = await HandlerExtensions.ExecuteAsync(message, ct);
 
+        return CreateResponse(response);
+        /*
         if (response.IsFailure)
         {
             return Results.ValidationProblem(
@@ -80,6 +79,21 @@ public static class WebApplicationExtensions
                 errors: new Dictionary<string, string[]>(),
                 statusCode: (int)HttpStatusCode.BadRequest
                 );
+        }
+
+        return Results.Ok(response.Payload);
+        */
+    }
+
+    private static IResult CreateResponse<TResponse>(IHandlerResponse<TResponse> response)
+    {
+        if (response.IsFailure)
+        {
+            return Results.ValidationProblem(
+                title: response.Message,
+                errors: new Dictionary<string, string[]>(),
+                statusCode: (int)HttpStatusCode.BadRequest
+            );
         }
 
         return Results.Ok(response.Payload);

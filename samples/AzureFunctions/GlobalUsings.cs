@@ -2,3 +2,4 @@
 global using Microsoft.Azure.Functions.Worker;
 global using Microsoft.Azure.Functions.Worker.Http;
 global using AzureFunctions.Configuration;
+global using AstroCqrs;

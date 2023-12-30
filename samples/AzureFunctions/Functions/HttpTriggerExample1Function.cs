@@ -1,6 +1,6 @@
 using Handlers.Orders.Commands;
 
-namespace AstroCqrs.AzureFunctions;
+namespace AzureFunctions.Functions;
 
 /*
 * An example of reusing a Command in HttpTrigger Azure Function

@@ -22,23 +22,21 @@ public static class AzureFunction
 
         DeserializeMessage(requestBody, jsonOptions, out TCommand message);
 
-        return await ExecuteHttpAsync(message, request);
+        var validationResult = await ValidationExtensions.ExecuteValidationAsync(message);
 
-        //var validationResult = await ValidationExtensions.ExecuteValidationAsync(message);
+        if (validationResult is not null)
+        {
+            return await Failure(request, validationResult);
+        }
+        
+        response = await HandlerExtensions.ExecuteAsync(message, request.FunctionContext.CancellationToken);
 
-        //if (validationResult is not null)
-        //{
-        //    return await Failure(request, validationResult);
-        //}
-
-        //response = await HandlerExtensions.ExecuteAsync(message, request.FunctionContext.CancellationToken);
-
-        //if (response.IsFailure)
-        //{
-        //    return await Failure(request, response.Message);
-        //}
-
-        //return await Success(request, response.Payload);
+        if (response.IsFailure)
+        {
+            return await Failure(request, response.Message);
+        }
+        
+        return await Success(request, response.Payload);
     }
 
     public static async Task<HttpResponseData> ExecuteHttpGetAsync<TQuery, TResponse>(HttpRequestData request, JsonSerializerOptions jsonOptions) where TQuery : IHandlerMessage<IHandlerResponse<TResponse>>
@@ -94,26 +92,26 @@ public static class AzureFunction
         await HandlerExtensions.ExecuteWithEmptyMessageAsync<TCommand, IHandlerResponse<TResponse>>(context.CancellationToken);
     }
 
+    /*
     private static async Task<HttpResponseData> ExecuteHttpAsync<TMessage, TResponse>(TMessage message, HttpRequestData request) where TMessage : IHandlerMessage<IHandlerResponse<TResponse>>
     {
-
-        IHandlerResponse<TResponse>? response;
-
         var validationResult = await ValidationExtensions.ExecuteValidationAsync(message);
 
         if (validationResult is not null)
         {
             return await Failure(request, validationResult);
         }
-        response = await HandlerExtensions.ExecuteAsync(message, request.FunctionContext.CancellationToken);
+        
+        var response = await HandlerExtensions.ExecuteAsync(message, request.FunctionContext.CancellationToken);
 
         if (response.IsFailure)
         {
             return await Failure(request, response.Message);
         }
+        
         return await Success(request, response.Payload);
     }
-
+*/
     private static async Task<HttpResponseData> Success(HttpRequestData request, object? payload)
     {
         var response = request.CreateResponse(HttpStatusCode.OK);

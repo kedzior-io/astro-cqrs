@@ -33,14 +33,15 @@ public static class HandlerExtensions
 
         var registry = Conf.ServiceResolver.Resolve<HandlerRegistry>();
 
-        if (registry.TryGetValue(messageType, out var handlerDefinition))
+        if (!registry.TryGetValue(messageType, out var handlerDefinition))
         {
-            handlerDefinition.HandlerExecutor ??= CreateHandlerExecutor(messageType);
-
-            return ((HandlerExecutorBase<TResponse>)handlerDefinition.HandlerExecutor).Execute(message, handlerDefinition.HandlerType, ct);
+            throw new InvalidOperationException(
+                $"Unable to create an instance of the handler for command [{messageType.FullName}]");
         }
 
-        throw new InvalidOperationException($"Unable to create an instance of the handler for command [{messageType.FullName}]");
+        handlerDefinition.HandlerExecutor ??= CreateHandlerExecutor(messageType);
+
+        return ((HandlerExecutorBase<TResponse>)handlerDefinition.HandlerExecutor).Execute(message, handlerDefinition.HandlerType, ct);
 
         static HandlerExecutorBase<TResponse> CreateHandlerExecutor(Type tCommand)
             => (HandlerExecutorBase<TResponse>)

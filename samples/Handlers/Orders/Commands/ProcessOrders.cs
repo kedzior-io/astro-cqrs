@@ -17,7 +17,7 @@ public static class ProcessOrders
 
         public override async Task<IHandlerResponse<Response>> ExecuteAsync(Command command, CancellationToken ct)
         {
-            var message = await Task.FromResult("All orders processed succesfully");
+            var message = await Task.FromResult("All orders processed successfully");
             var response = new Response(message);
 
             return Success(response);

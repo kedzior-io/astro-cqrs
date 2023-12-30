@@ -1,6 +1,6 @@
 using Handlers.Orders.Queries;
 
-namespace AstroCqrs.AzureFunctions;
+namespace AzureFunctions.Functions;
 
 /*
 * An example of reusing a Query in HttpTrigger Azure Function
