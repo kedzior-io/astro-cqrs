@@ -49,14 +49,14 @@ app.MapGetHandler<GetOrderById.Query, GetOrderById.Response>("/orders.getById.{i
 ```csharp
 public static class GetOrderById
 {
-    public class Query : IQuery<Response>
+    public class Query : IQuery<IHandlerResponse<Response>>
     {
         public string Id { get; set; } = "";
     }
 
     public record Response(OrderModel Order);
 
-    public record OrderModel(Guid Id, string CustomerName, decimal Total);
+    public record OrderModel(string Id, string CustomerName, decimal Total);
 
     public class Handler : QueryHandler<Query, Response>
     {
@@ -64,11 +64,17 @@ public static class GetOrderById
         {
         }
 
-        public override async Task<Response> ExecuteAsync(Query query, CancellationToken ct)
+        public override async Task<IHandlerResponse<Response>> ExecuteAsync(Query query, CancellationToken ct)
         {
-            var order = await Task.FromResult(new OrderModel(Guid.NewGuid(), "Gavin Belson", 20));
+            // retire data from data store
+            var order = await Task.FromResult(new OrderModel(query.Id, "Gavin Belson", 20));
 
-            return new Response(order);
+            if (order is null)
+            {
+                return Error("Order not found");
+            }
+
+            return Success(new Response(order));
         }
     }
 }
@@ -91,13 +97,12 @@ app.MapPostHandler<CreateOrder.Command, CreateOrder.Response>("/orders.create");
 ```csharp
 public static class CreateOrder
 {
-    public sealed record Command(string CustomerName, decimal Total) : ICommand<Response>;
-    
-    public record Response(Guid OrderId);
+    public sealed record Command(string CustomerName, decimal Total) : ICommand<IHandlerResponse<Response>>;
+    public sealed record Response(Guid OrderId, string SomeValue);
 
-    public sealed class Validator : Validator<Command>
+    public sealed class CreateOrderValidator : Validator<Command>
     {
-        public Validator()
+        public CreateOrderValidator()
         {
             RuleFor(x => x.CustomerName)
                 .NotNull()
@@ -111,10 +116,12 @@ public static class CreateOrder
         {
         }
 
-        public override async Task<Response> ExecuteAsync(Command command, CancellationToken ct)
+        public override async Task<IHandlerResponse<Response>> ExecuteAsync(Command command, CancellationToken ct)
         {
             var orderId = await Task.FromResult(Guid.NewGuid());
-            return new Response(orderId, $"{command.CustomerName}");
+            var response = new Response(orderId, $"{command.CustomerName}");
+
+            return Success(response);
         }
     }
 }
@@ -122,6 +129,10 @@ public static class CreateOrder
 
 ☝️ Simple: Same as above + the command can be flexible and return a response
 
+Each handler always returns 3 types of responses which enforces consistency across all handlers:
+- `Success(payload)`
+- `Success()`
+- `Error("Error message")`
 
 ## Azure Functions
 
@@ -196,6 +207,7 @@ There are few things to work out here and mainly:
 - Handler Context - lazy load services needed in the most handlers aka DbContext, in memory cache etc. 
 - Request Context - easily access request header values: country code, user ID etc
 - Authorization example
+- MVC example
 - Blazor example
 - Unit test example
 - Integration test example

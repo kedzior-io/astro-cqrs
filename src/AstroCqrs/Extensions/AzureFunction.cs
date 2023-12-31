@@ -103,27 +103,6 @@ public static class AzureFunction
     {
         await HandlerExtensions.ExecuteWithEmptyMessageAsync<TCommand, IHandlerResponse<TResponse>>(context.CancellationToken);
     }
-
-    /*
-    private static async Task<HttpResponseData> ExecuteHttpAsync<TMessage, TResponse>(TMessage message, HttpRequestData request) where TMessage : IHandlerMessage<IHandlerResponse<TResponse>>
-    {
-        var validationResult = await ValidationExtensions.ExecuteValidationAsync(message);
-
-        if (validationResult is not null)
-        {
-            return await Failure(request, validationResult);
-        }
-        
-        var response = await HandlerExtensions.ExecuteAsync(message, request.FunctionContext.CancellationToken);
-
-        if (response.IsFailure)
-        {
-            return await Failure(request, response.Message);
-        }
-        
-        return await Success(request, response.Payload);
-    }
-*/
     private static async Task<HttpResponseData> Success(HttpRequestData request, object? payload)
     {
         var response = request.CreateResponse(HttpStatusCode.OK);

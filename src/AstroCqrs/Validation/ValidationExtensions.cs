@@ -4,7 +4,7 @@ namespace AstroCqrs;
 
 internal static class ValidationExtensions
 {
-    internal static IValidator? _validator = null;
+    private static IValidator? _validator = null;
 
     public static async Task<IDictionary<string, string[]>?> ExecuteValidationAsync<TResponse>(IHandlerMessage<TResponse> message)
     {
@@ -29,7 +29,7 @@ internal static class ValidationExtensions
         return await ExecuteValidationAsync(message);
     }
 
-    internal static IValidator GetValidator(Type validatorType)
+    private static IValidator GetValidator(Type validatorType)
     {
         _validator = (IValidator)Conf.ServiceResolver.CreateSingleton(validatorType);
         return _validator;

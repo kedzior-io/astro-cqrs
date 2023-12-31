@@ -12,7 +12,7 @@ public static class ListOrders
 
     public sealed class Handler : QueryHandler<Query, Response>
     {
-        public Handler()
+        public Handler(IHandlerContext context): base(context)
         {
         }
 
