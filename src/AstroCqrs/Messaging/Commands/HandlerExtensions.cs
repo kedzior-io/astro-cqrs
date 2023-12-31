@@ -36,7 +36,7 @@ public static class HandlerExtensions
         if (!registry.TryGetValue(messageType, out var handlerDefinition))
         {
             throw new InvalidOperationException(
-                $"Unable to create an instance of the handler for command [{messageType.FullName}]");
+                $"Unable to create an instance of the handler for [{messageType.FullName}]");
         }
 
         handlerDefinition.HandlerExecutor ??= CreateHandlerExecutor(messageType);

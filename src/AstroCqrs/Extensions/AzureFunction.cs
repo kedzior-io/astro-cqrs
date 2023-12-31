@@ -17,6 +17,12 @@ public static class AzureFunction
         if (string.IsNullOrWhiteSpace(requestBody))
         {
             response = await HandlerExtensions.ExecuteWithEmptyMessageAsync<TCommand, IHandlerResponse<TResponse>>(request.FunctionContext.CancellationToken);
+            
+            if (response.IsFailure)
+            {
+                return await Failure(request, response.Message);
+            }
+            
             return await Success(request, response);
         }
 
@@ -46,6 +52,12 @@ public static class AzureFunction
         if (request.Query.Count == 0)
         {
             response = await HandlerExtensions.ExecuteWithEmptyMessageAsync<TQuery, IHandlerResponse<TResponse>>(request.FunctionContext.CancellationToken);
+            
+            if (response.IsFailure)
+            {
+                return await Failure(request, response.Message);
+            }
+            
             return await Success(request, response);
         }
 
