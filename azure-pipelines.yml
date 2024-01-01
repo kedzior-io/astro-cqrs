@@ -8,7 +8,8 @@ variables:
   buildConfiguration: 'Release'
   major: '1'
   minor: '0'
-  patch: '1'  
+  patch: '1'
+  version: '$(major).$(minor).$(patch)'  
 
 steps:
   - task: UseDotNet@2
@@ -35,9 +36,7 @@ steps:
       command: 'pack'
       packagesToPack: '**/AstroCqrs.csproj'
       versioningScheme: byEnvVar
-      majorVersion: '$(major)'
-      minorVersion: '$(minor)'
-      patchVersion: '$(patch)'
+      versionEnvVar: '$(version)'
 
   - task: NuGetCommand@2
     displayName: "nuget push"    
