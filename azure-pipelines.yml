@@ -12,18 +12,18 @@ variables:
 
 steps:
   - task: UseDotNet@2
-    displayName: 'Install .NET Core SDK 7.x'
+    displayName: 'install .NET 7.x'
     inputs:
       version: 7.x
 
   - task: DotNetCoreCLI@2
-    displayName: "Restore"
+    displayName: "restore"
     inputs:
       command: restore
       projects: "**/*.csproj"
 
   - task: DotNetCoreCLI@2
-    displayName: "Build"
+    displayName: "build"
     inputs:
       command: build
       projects: "**/*.csproj"
@@ -38,9 +38,16 @@ steps:
       majorVersion: '$(major)'
       minorVersion: '$(minor)'
       patchVersion: '$(patch)'
-  - task: DotNetCoreCLI@2
+
+  - task: NuGetAuthenticate@1
+    displayName: "nuget authenticate"  
+    inputs:
+      nuGetServiceConnections: 'NuGet'
+
+  - task: NuGetCommand@2
+    displayName: "nuget push"    
     inputs:
       command: 'push'
-      packagesToPush: '$(Build.ArtifactStagingDirectory)/*.nupkg'
-      nuGetFeedType: 'internal'
-      publishVstsFeed: '0eb35c81-e81f-4799-98d3-75f724ac9c7c/b92dac4f-babb-4708-99a4-2e0cdeacc868'      
+      packagesToPush: '$(Build.ArtifactStagingDirectory)/**/*.nupkg;!$(Build.ArtifactStagingDirectory)/**/*.symbols.nupkg'
+      nuGetFeedType: 'external'
+      publishFeedCredentials: 'NuGet' 
