@@ -8,7 +8,7 @@ variables:
   buildConfiguration: 'Release'
   major: '1'
   minor: '0'
-  patch: '0'  
+  patch: '1'  
 
 steps:
   - task: UseDotNet@2
@@ -34,7 +34,7 @@ steps:
     inputs:
       command: 'pack'
       packagesToPack: '**/AstroCqrs.csproj'
-      versioningScheme: byPrereleaseNumber
+      versioningScheme: byEnvVar
       majorVersion: '$(major)'
       minorVersion: '$(minor)'
       patchVersion: '$(patch)'
