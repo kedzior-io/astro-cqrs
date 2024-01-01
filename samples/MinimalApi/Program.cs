@@ -38,7 +38,6 @@ app.MapPostHandler<ProcessOrders.Command, ProcessOrders.Response>("/orders.proce
 app.MapPostHandler<GetOrderAuthorized.Query, GetOrderAuthorized.Response>("/orders.authorized")
     .RequireAuthorization();
 
-
 app.UseCors();
 app.UseAuthentication();
 app.UseAuthorization();
