@@ -18,7 +18,7 @@ steps:
       command: restore
       projects: "**/*.csproj"
   - task: DotNetCoreCLI@2
-    displayName: "[Solution] Build"
+    displayName: "Build"
     inputs:
       command: build
       projects: "**/*.csproj"
