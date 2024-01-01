@@ -1,0 +1,25 @@
+trigger:
+- main
+
+pool:
+  vmImage: ubuntu-latest
+
+variables:
+  buildConfiguration: 'Release'
+
+steps:
+  - task: UseDotNet@2
+    displayName: 'Install .NET Core SDK 7.x'
+    inputs:
+      version: 7.x
+  - task: DotNetCoreCLI@2
+    displayName: "Restore"
+    inputs:
+      command: restore
+      projects: "**/*.csproj"
+  - task: DotNetCoreCLI@2
+    displayName: "[Solution] Build"
+    inputs:
+      command: build
+      projects: "**/*.csproj"
+      arguments: "--configuration $(BuildConfiguration)"
