@@ -36,7 +36,7 @@ steps:
       command: 'pack'
       packagesToPack: '**/AstroCqrs.csproj'
       versioningScheme: byEnvVar
-      versionEnvVar: '$(version)'
+      versionEnvVar: version
 
   - task: NuGetCommand@2
     displayName: "nuget push"    
