@@ -12,14 +12,22 @@ steps:
     displayName: 'Install .NET Core SDK 7.x'
     inputs:
       version: 7.x
+
   - task: DotNetCoreCLI@2
     displayName: "Restore"
     inputs:
       command: restore
       projects: "**/*.csproj"
+
   - task: DotNetCoreCLI@2
     displayName: "Build"
     inputs:
       command: build
       projects: "**/*.csproj"
       arguments: "--configuration $(BuildConfiguration)"
+
+  - task: DotNetCoreCLI@2
+    inputs:
+      command: 'pack'
+      packagesToPack: '**/AstroCqrs.csproj'
+      versioningScheme: 'off'
