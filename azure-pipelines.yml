@@ -6,6 +6,9 @@ pool:
 
 variables:
   buildConfiguration: 'Release'
+  major: '1'
+  minor: '0'
+  patch: '0'  
 
 steps:
   - task: UseDotNet@2
@@ -27,7 +30,17 @@ steps:
       arguments: "--configuration $(BuildConfiguration)"
 
   - task: DotNetCoreCLI@2
+    displayName: "pack"  
     inputs:
       command: 'pack'
       packagesToPack: '**/AstroCqrs.csproj'
-      versioningScheme: 'off'
+      versioningScheme: byPrereleaseNumber
+      majorVersion: '$(major)'
+      minorVersion: '$(minor)'
+      patchVersion: '$(patch)'
+  - task: DotNetCoreCLI@2
+    inputs:
+      command: 'push'
+      packagesToPush: '$(Build.ArtifactStagingDirectory)/*.nupkg'
+      nuGetFeedType: 'internal'
+      publishVstsFeed: '0eb35c81-e81f-4799-98d3-75f724ac9c7c/b92dac4f-babb-4708-99a4-2e0cdeacc868'      
