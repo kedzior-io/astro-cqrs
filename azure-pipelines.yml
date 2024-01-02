@@ -6,16 +6,16 @@ pool:
 
 variables:
   buildConfiguration: 'Release'
-  major: '1'
+  major: '2'
   minor: '0'
-  patch: '1'
+  patch: '0'
   version: '$(major).$(minor).$(patch)'  
 
 steps:
   - task: UseDotNet@2
-    displayName: 'install .NET 7.x'
+    displayName: 'install .NET 8.x'
     inputs:
-      version: 7.x
+      version: 8.x
 
   - task: DotNetCoreCLI@2
     displayName: "restore"
