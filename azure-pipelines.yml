@@ -1,0 +1,47 @@
+trigger:
+- main
+
+pool:
+  vmImage: ubuntu-latest
+
+variables:
+  buildConfiguration: 'Release'
+  major: '1'
+  minor: '0'
+  patch: '1'
+  version: '$(major).$(minor).$(patch)'  
+
+steps:
+  - task: UseDotNet@2
+    displayName: 'install .NET 7.x'
+    inputs:
+      version: 7.x
+
+  - task: DotNetCoreCLI@2
+    displayName: "restore"
+    inputs:
+      command: restore
+      projects: "**/*.csproj"
+
+  - task: DotNetCoreCLI@2
+    displayName: "build"
+    inputs:
+      command: build
+      projects: "**/*.csproj"
+      arguments: "--configuration $(BuildConfiguration)"
+
+  - task: DotNetCoreCLI@2
+    displayName: "pack"  
+    inputs:
+      command: 'pack'
+      packagesToPack: '**/AstroCqrs.csproj'
+      versioningScheme: byEnvVar
+      versionEnvVar: version
+
+  - task: NuGetCommand@2
+    displayName: "nuget push"    
+    inputs:
+      command: 'push'
+      packagesToPush: '$(Build.ArtifactStagingDirectory)/**/*.nupkg;!$(Build.ArtifactStagingDirectory)/**/*.symbols.nupkg'
+      nuGetFeedType: 'external'
+      publishFeedCredentials: 'NuGet' 

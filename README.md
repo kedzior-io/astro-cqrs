@@ -1,6 +1,6 @@
 # Astro CQRS
 
-![Nuget](https://img.shields.io/nuget/v/AstroCQRS?link=https%3A%2F%2Fwww.nuget.org%2Fpackages%2FAstroCqrs%2F)
+![Nuget](https://img.shields.io/nuget/v/AstroCQRS?link=https%3A%2F%2Fwww.nuget.org%2Fpackages%2FAstroCqrs%2F) [![Build Status](https://dev.azure.com/isready/astro-cqrs/_apis/build/status%2Fkedzior-io.astro-cqrs?branchName=main)](https://dev.azure.com/isready/astro-cqrs/_build/latest?definitionId=16&branchName=main)
 
 ![Astro.CQRS](https://raw.githubusercontent.com/kedzior-io/astro-cqrs/main/astrocqrs.jpg)
 
@@ -149,9 +149,9 @@ services.AddAstroCqrsFromAssemblyContaining<ListOrders.Query>();
 public class HttpTriggerFunction
 {
     [Function(nameof(HttpTriggerFunction))]
-    public async Task<HttpResponseData> Run([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post")] HttpRequestData req)
+    public async Task<HttpResponseData> Run([HttpTrigger(AuthorizationLevel.Anonymous,"post")] HttpRequestData req)
     {
-        return await AzureFunctionExtensions.ExecuteHttpPostAsync<GetOrderById.Query, GetOrderById.Response>(req);
+        return await AzureFunction.ExecuteHttpPostAsync<GetOrderById.Query, GetOrderById.Response>(req);
     }
 }
 ```
@@ -163,7 +163,7 @@ public class ServiceBusFunction
     [Function(nameof(ServiceBusFunction))]
     public async Task Run([ServiceBusTrigger("created-order", Connection = "ConnectionStrings:ServiceBus")] string json, FunctionContext context)
     {
-        await AzureFunctionExtensions.ExecuteServiceBusAsync<CreateOrder.Command, CreateOrder.Response>(json, JsonOptions.Defaults, context);
+        await AzureFunction.ExecuteServiceBusAsync<CreateOrder.Command, CreateOrder.Response>(json, JsonOptions.Defaults, context);
     }
 }
 ```
@@ -203,12 +203,8 @@ It can be seen in production here: [Salarioo.com](https://salarioo.com)
 
 There are few things to work out here and mainly:
 
-- Customizing Handler to inject EF DbContext
-- Handler Context - lazy load services needed in the most handlers aka DbContext, in memory cache etc. 
-- Request Context - easily access request header values: country code, user ID etc
-- Authorization example
-- MVC example
 - Blazor example
+- MVC example
 - Unit test example
 - Integration test example
 - Benchmarks
