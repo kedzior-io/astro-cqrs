@@ -146,7 +146,7 @@ public class HttpTriggerFunction
     [Function(nameof(HttpTriggerFunction))]
     public async Task<HttpResponseData> Run([HttpTrigger(AuthorizationLevel.Anonymous,"post")] HttpRequestData req)
     {
-        return await AzureFunction.ExecuteHttpPostAsync<GetOrderById.Query, GetOrderById.Response>(req);
+        return await AzureFunction.ExecuteHttpGetAsync<GetOrderById.Query, GetOrderById.Response>(req);
     }
 }
 ```
