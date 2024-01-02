@@ -11,7 +11,7 @@ In-process messaging with no dependencies that allows to take decoupled, command
 
 It is designed to be used with:
 
-- .NET 7
+- .NET 8
 - Minimal API
 - Azure Functions (HttpTrigger, ServiceBusTrigger and TimeTrigger)
 - Blazor (todo)
@@ -66,7 +66,7 @@ public static class GetOrderById
 
         public override async Task<IHandlerResponse<Response>> ExecuteAsync(Query query, CancellationToken ct)
         {
-            // retire data from data store
+            // retrive data from data store
             var order = await Task.FromResult(new OrderModel(query.Id, "Gavin Belson", 20));
 
             if (order is null)
@@ -129,11 +129,6 @@ public static class CreateOrder
 
 ☝️ Simple: Same as above + the command can be flexible and return a response
 
-Each handler always returns 3 types of responses which enforces consistency across all handlers:
-- `Success(payload)`
-- `Success()`
-- `Error("Error message")`
-
 ## Azure Functions
 
 Here are the same query and command used in Azure Functions!
@@ -167,10 +162,27 @@ public class ServiceBusFunction
     }
 }
 ```
+## Handlers
+
+The handler always returns three types of responses, which enforce consistency:
+- `Success(payload)` - handler executed with success and has response
+- `Success()` - handler executed with success but has no response
+- `Error("Error message")`- handler has an error
+
+`Error("Order not found")` will return [Problem Details](https://datatracker.ietf.org/doc/html/rfc7807) (a standard way of specifying errors in HTTP API responses)
+
+```
+{
+    "type": "https://tools.ietf.org/html/rfc9110#section-15.5.1",
+    "title": "Order not found",
+    "status": 400,
+    "errors": {}
+}
+```
 
 ## Sample Code
 
-Check samples available in this repo. 
+Check [samples](https://github.com/kedzior-io/astro-cqrs/tree/main/samples) available in this repo. 
 
 ## Motives
 
@@ -199,7 +211,7 @@ I decided to borrow the best features from existing frameworks to create an in-p
 It can be seen in production here: [Salarioo.com](https://salarioo.com)
 
 
-## TODO
+## Todo
 
 There are few things to work out here and mainly:
 
@@ -215,5 +227,6 @@ Pull requests are welcome. For major changes, please open an issue first to disc
 
 ## Questions, feature requests
 
+- Create a [new issue](https://github.com/kedzior-io/astro-cqrs/issues/new)
 - [Twitter](https://twitter.com/KedziorArtur)
 - [Discord](https://discord.gg/j3vmcaZG)
