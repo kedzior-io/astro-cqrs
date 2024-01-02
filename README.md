@@ -11,7 +11,7 @@ In-process messaging with no dependencies that allows to take decoupled, command
 
 It is designed to be used with:
 
-- .NET 7
+- .NET 8
 - Minimal API
 - Azure Functions (HttpTrigger, ServiceBusTrigger and TimeTrigger)
 - Blazor (todo)
@@ -49,14 +49,14 @@ app.MapGetHandler<GetOrderById.Query, GetOrderById.Response>("/orders.getById.{i
 ```csharp
 public static class GetOrderById
 {
-    public class Query : IQuery<Response>
+    public class Query : IQuery<IHandlerResponse<Response>>
     {
         public string Id { get; set; } = "";
     }
 
     public record Response(OrderModel Order);
 
-    public record OrderModel(Guid Id, string CustomerName, decimal Total);
+    public record OrderModel(string Id, string CustomerName, decimal Total);
 
     public class Handler : QueryHandler<Query, Response>
     {
@@ -64,11 +64,17 @@ public static class GetOrderById
         {
         }
 
-        public override async Task<Response> ExecuteAsync(Query query, CancellationToken ct)
+        public override async Task<IHandlerResponse<Response>> ExecuteAsync(Query query, CancellationToken ct)
         {
-            var order = await Task.FromResult(new OrderModel(Guid.NewGuid(), "Gavin Belson", 20));
+            // retrive data from data store
+            var order = await Task.FromResult(new OrderModel(query.Id, "Gavin Belson", 20));
 
-            return new Response(order);
+            if (order is null)
+            {
+                return Error("Order not found");
+            }
+
+            return Success(new Response(order));
         }
     }
 }
@@ -91,13 +97,12 @@ app.MapPostHandler<CreateOrder.Command, CreateOrder.Response>("/orders.create");
 ```csharp
 public static class CreateOrder
 {
-    public sealed record Command(string CustomerName, decimal Total) : ICommand<Response>;
-    
-    public record Response(Guid OrderId);
+    public sealed record Command(string CustomerName, decimal Total) : ICommand<IHandlerResponse<Response>>;
+    public sealed record Response(Guid OrderId, string SomeValue);
 
-    public sealed class Validator : Validator<Command>
+    public sealed class CreateOrderValidator : Validator<Command>
     {
-        public Validator()
+        public CreateOrderValidator()
         {
             RuleFor(x => x.CustomerName)
                 .NotNull()
@@ -111,17 +116,18 @@ public static class CreateOrder
         {
         }
 
-        public override async Task<Response> ExecuteAsync(Command command, CancellationToken ct)
+        public override async Task<IHandlerResponse<Response>> ExecuteAsync(Command command, CancellationToken ct)
         {
             var orderId = await Task.FromResult(Guid.NewGuid());
-            return new Response(orderId, $"{command.CustomerName}");
+            var response = new Response(orderId, $"{command.CustomerName}");
+
+            return Success(response);
         }
     }
 }
 ```
 
 ☝️ Simple: Same as above + the command can be flexible and return a response
-
 
 ## Azure Functions
 
@@ -156,10 +162,27 @@ public class ServiceBusFunction
     }
 }
 ```
+## Handlers
+
+The handler always returns three types of responses, which enforce consistency:
+- `Success(payload)` - handler executed with success and has response
+- `Success()` - handler executed with success but has no response
+- `Error("Error message")`- handler has an error
+
+`Error("Order not found")` will return [Problem Details](https://datatracker.ietf.org/doc/html/rfc7807) (a standard way of specifying errors in HTTP API responses)
+
+```
+{
+    "type": "https://tools.ietf.org/html/rfc9110#section-15.5.1",
+    "title": "Order not found",
+    "status": 400,
+    "errors": {}
+}
+```
 
 ## Sample Code
 
-Check samples available in this repo. 
+Check [samples](https://github.com/kedzior-io/astro-cqrs/tree/main/samples) available in this repo. 
 
 ## Motives
 
@@ -188,7 +211,7 @@ I decided to borrow the best features from existing frameworks to create an in-p
 It can be seen in production here: [Salarioo.com](https://salarioo.com)
 
 
-## TODO
+## Todo
 
 There are few things to work out here and mainly:
 
@@ -204,5 +227,6 @@ Pull requests are welcome. For major changes, please open an issue first to disc
 
 ## Questions, feature requests
 
+- Create a [new issue](https://github.com/kedzior-io/astro-cqrs/issues/new)
 - [Twitter](https://twitter.com/KedziorArtur)
 - [Discord](https://discord.gg/j3vmcaZG)

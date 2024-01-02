@@ -7,7 +7,7 @@ namespace Handlers.Orders.Queries;
 
 public static class GetOrderByTotal
 {
-    public sealed record Query() : IQuery<Response>
+    public sealed record Query() : IQuery<IHandlerResponse<Response>>
     {
         public int TotalValue { get; set; }
     }
@@ -16,9 +16,9 @@ public static class GetOrderByTotal
 
     public record OrderModel(Guid Id, string CustomerName, decimal Total);
 
-    public sealed class Validator : Validator<Query>
+    public sealed class GetOrderByTotalValidator : Validator<Query>
     {
-        public Validator()
+        public GetOrderByTotalValidator()
         {
             RuleFor(x => x.TotalValue)
                 .GreaterThan(0);
@@ -27,11 +27,11 @@ public static class GetOrderByTotal
 
     public sealed class Handler : QueryHandler<Query, Response>
     {
-        public Handler()
+        public Handler(IHandlerContext context): base(context)
         {
         }
 
-        public override async Task<Response> ExecuteAsync(Query query, CancellationToken ct)
+        public override async Task<IHandlerResponse<Response>> ExecuteAsync(Query query, CancellationToken ct)
         {
             var orders = await Task.FromResult(
                 new List<OrderModel>()
@@ -42,7 +42,7 @@ public static class GetOrderByTotal
                 }
              );
 
-            return new Response(orders);
+            return Success(new Response(orders));
         }
     }
 }

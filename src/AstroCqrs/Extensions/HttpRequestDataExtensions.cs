@@ -10,12 +10,7 @@ public static class HttpRequestDataExtensions
     {
         var body = await request.ReadAsStringAsync();
 
-        if (string.IsNullOrWhiteSpace(body))
-        {
-            return new();
-        }
-
-        return HttpUtility.ParseQueryString(body);
+        return string.IsNullOrWhiteSpace(body) ? new NameValueCollection() : HttpUtility.ParseQueryString(body);
     }
 
     public static async Task<string> BodyAsync(this HttpRequestData request)

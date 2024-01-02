@@ -7,16 +7,22 @@ using System.Text.Json;
 
 namespace AstroCqrs;
 
-public static class AzureFunctionExtensions
+public static class AzureFunction
 {
-    public static async Task<HttpResponseData> ExecuteHttpPostAsync<TCommand, TResponse>(HttpRequestData request, JsonSerializerOptions jsonOptions) where TCommand : IHandlerMessage<TResponse>
+    public static async Task<HttpResponseData> ExecuteHttpPostAsync<TCommand, TResponse>(HttpRequestData request, JsonSerializerOptions jsonOptions) where TCommand : IHandlerMessage<IHandlerResponse<TResponse>>
     {
         var requestBody = await request.BodyAsync();
-        TResponse? response;
+        IHandlerResponse<TResponse>? response;
 
         if (string.IsNullOrWhiteSpace(requestBody))
         {
-            response = await HandlerExtensions.ExecuteWithEmptyMessageAsync<TCommand, TResponse>(request.FunctionContext.CancellationToken);
+            response = await HandlerExtensions.ExecuteWithEmptyMessageAsync<TCommand, IHandlerResponse<TResponse>>(request.FunctionContext.CancellationToken);
+            
+            if (response.IsFailure)
+            {
+                return await Failure(request, response.Message);
+            }
+            
             return await Success(request, response);
         }
 
@@ -28,23 +34,34 @@ public static class AzureFunctionExtensions
         {
             return await Failure(request, validationResult);
         }
-
+        
         response = await HandlerExtensions.ExecuteAsync(message, request.FunctionContext.CancellationToken);
 
-        return await Success(request, response);
+        if (response.IsFailure)
+        {
+            return await Failure(request, response.Message);
+        }
+        
+        return await Success(request, response.Payload);
     }
 
-    public static async Task<HttpResponseData> ExecuteHttpGetAsync<TCommand, TResponse>(HttpRequestData request, JsonSerializerOptions jsonOptions) where TCommand : IHandlerMessage<TResponse>
+    public static async Task<HttpResponseData> ExecuteHttpGetAsync<TQuery, TResponse>(HttpRequestData request, JsonSerializerOptions jsonOptions) where TQuery : IHandlerMessage<IHandlerResponse<TResponse>>
     {
-        TResponse? response;
+        IHandlerResponse<TResponse>? response;
 
         if (request.Query.Count == 0)
         {
-            response = await HandlerExtensions.ExecuteWithEmptyMessageAsync<TCommand, TResponse>(request.FunctionContext.CancellationToken);
+            response = await HandlerExtensions.ExecuteWithEmptyMessageAsync<TQuery, IHandlerResponse<TResponse>>(request.FunctionContext.CancellationToken);
+            
+            if (response.IsFailure)
+            {
+                return await Failure(request, response.Message);
+            }
+            
             return await Success(request, response);
         }
 
-        DeserializeFromQuery(request.Query, jsonOptions, out TCommand message);
+        DeserializeFromQuery(request.Query, jsonOptions, out TQuery message);
 
         var validationResult = await ValidationExtensions.ExecuteValidationAsync(message);
 
@@ -55,14 +72,19 @@ public static class AzureFunctionExtensions
 
         response = await HandlerExtensions.ExecuteAsync(message, request.FunctionContext.CancellationToken);
 
-        return await Success(request, response);
+        if (response.IsFailure)
+        {
+            return await Failure(request, response.Message);
+        }
+
+        return await Success(request, response.Payload);
     }
 
-    public static async Task ExecuteServiceBusAsync<TCommand, TResponse>(string command, JsonSerializerOptions jsonOptions, FunctionContext context) where TCommand : IHandlerMessage<TResponse>
+    public static async Task ExecuteServiceBusAsync<TCommand, TResponse>(string command, JsonSerializerOptions jsonOptions, FunctionContext context) where TCommand : IHandlerMessage<IHandlerResponse<TResponse>>
     {
         if (string.IsNullOrWhiteSpace(command))
         {
-            await HandlerExtensions.ExecuteWithEmptyMessageAsync<TCommand, TResponse>(context.CancellationToken);
+            await HandlerExtensions.ExecuteWithEmptyMessageAsync<TCommand, IHandlerResponse<TResponse>>(context.CancellationToken);
         }
 
         DeserializeMessage(command, jsonOptions, out TCommand message);
@@ -77,11 +99,10 @@ public static class AzureFunctionExtensions
         await HandlerExtensions.ExecuteAsync(message, context.CancellationToken);
     }
 
-    public static async Task ExecuteTimerAsync<TCommand, TResponse>(FunctionContext context) where TCommand : IHandlerMessage<TResponse>
+    public static async Task ExecuteTimerAsync<TCommand, TResponse>(FunctionContext context) where TCommand : IHandlerMessage<IHandlerResponse<TResponse>>
     {
-        await HandlerExtensions.ExecuteWithEmptyMessageAsync<TCommand, TResponse>(context.CancellationToken);
+        await HandlerExtensions.ExecuteWithEmptyMessageAsync<TCommand, IHandlerResponse<TResponse>>(context.CancellationToken);
     }
-
     private static async Task<HttpResponseData> Success(HttpRequestData request, object? payload)
     {
         var response = request.CreateResponse(HttpStatusCode.OK);

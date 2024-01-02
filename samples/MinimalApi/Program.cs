@@ -1,27 +1,23 @@
 using AstroCqrs;
+using Handlers.Abstractions;
 using Handlers.Orders.Commands;
 using Handlers.Orders.Queries;
-
-/*
-  TODO:
-
-  1. [Done] Command Handler
-  2. [Done] Command Validation
-  3. [Done] Abstract Minimal Api
-  4. [Done] Azure Functions - HTTP Request
-  5. [Done] Azure Functions - Service Bus
-  6. Inject DbContext
-  7. Handler Context
-  8. Request Context
-  9. Authorization example //.RequireAuthorization();
-  10. Handler Response
-
- */
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Host.UseSerilog((hostContext, services, configuration) =>
+{
+    configuration
+        .WriteTo.Console();
+});
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddAuthentication().AddJwtBearer();
+builder.Services.AddAuthorization();
+builder.Services.AddCors();
+builder.Services.AddScoped<IHandlerContext, HandlerContext>();
 
 builder.Services.AddAstroCqrs();
 
@@ -33,9 +29,18 @@ app.MapGetHandler<GetOrderById.Query, GetOrderById.Response>("/orders.getById.{i
 
 app.MapGetHandler<GetOrderByTotal.Query, GetOrderByTotal.Response>("/orders.getByTotal.{totalValue}");
 
+app.MapGetHandler<GetOrderByCustomerId.Query, GetOrderByCustomerId.Response>("/orders.getOrderByCustomerId.{id}");
+
 app.MapPostHandler<CreateOrder.Command, CreateOrder.Response>("/orders.create");
 
 app.MapPostHandler<ProcessOrders.Command, ProcessOrders.Response>("/orders.process");
+
+app.MapPostHandler<GetOrderAuthorized.Query, GetOrderAuthorized.Response>("/orders.authorized")
+    .RequireAuthorization();
+
+app.UseCors();
+app.UseAuthentication();
+app.UseAuthorization();
 
 if (app.Environment.IsDevelopment())
 {

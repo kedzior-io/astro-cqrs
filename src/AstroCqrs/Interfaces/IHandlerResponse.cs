@@ -1,10 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace AstroCqrs;
 
-namespace AstroCqrs.Interfaces;
-internal class IHandlerResponse
+public interface IHandlerResponse
 {
+    bool IsSuccess { get; }
+    bool IsFailure { get; }
+    string Message { get; }
+}
+
+public interface IHandlerResponse<out TResponse> : IHandlerResponse
+{
+    TResponse? Payload { get; }
 }

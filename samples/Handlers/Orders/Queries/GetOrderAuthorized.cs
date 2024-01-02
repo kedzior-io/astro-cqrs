@@ -4,7 +4,7 @@
  * An example of a Query with a parameters
  */
 
-public static class GetOrderById
+public static class GetOrderAuthorized
 {
     public class Query : IQuery<IHandlerResponse<Response>>
     {
@@ -23,14 +23,7 @@ public static class GetOrderById
 
         public override async Task<IHandlerResponse<Response>> ExecuteAsync(Query query, CancellationToken ct)
         {
-            // retire data from data store
             var order = await Task.FromResult(new OrderModel(query.Id, "Gavin Belson", 20));
-
-            if (order is null)
-            {
-                return Error("Order not found");
-            }
-
             return Success(new Response(order));
         }
     }

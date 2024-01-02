@@ -8,9 +8,7 @@ public sealed class Config
 
     internal static IServiceResolver ServiceResolver
     {
-        get => _resolver ?? throw new InvalidOperationException("Service resolver is null");
+        get => _resolver ?? throw new InvalidOperationException("Service Resolver not found. Did you forget to register AstroCQRS? (builder.Services.AddAstroCqrs())");
         set => _resolver = value;
     }
-
-    //internal static readonly ValidationOptions ValOpts = new();
 }

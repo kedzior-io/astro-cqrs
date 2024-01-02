@@ -6,19 +6,24 @@
 
 public static class ProcessOrders
 {
-    public sealed record Command() : ICommand<Response>;
+    public sealed record Command() : ICommand<IHandlerResponse<Response>>;
     public record Response(string Message);
 
     public sealed class Handler : CommandHandler<Command, Response>
     {
-        public Handler()
+        public Handler(IHandlerContext context): base(context)
         {
         }
 
-        public override async Task<Response> ExecuteAsync(Command command, CancellationToken ct)
+        public override async Task<IHandlerResponse<Response>> ExecuteAsync(Command command, CancellationToken ct)
         {
-            var message = await Task.FromResult("All orders processed succesfully");
-            return new Response(message);
+            var message = await Task.FromResult("All orders processed successfully");
+            
+            Logger.Information("Some sample log message");
+
+            var response = new Response(message);
+
+            return Success(response);
         }
     }
 }

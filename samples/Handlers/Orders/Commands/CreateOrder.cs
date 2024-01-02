@@ -8,12 +8,12 @@ namespace Handlers.Orders.Commands;
 
 public static class CreateOrder
 {
-    public sealed record Command(string CustomerName, decimal Total) : ICommand<Response>;
+    public sealed record Command(string CustomerName, decimal Total) : ICommand<IHandlerResponse<Response>>;
     public sealed record Response(Guid OrderId, string SomeValue);
 
-    public sealed class Validator : Validator<Command>
+    public sealed class CreateOrderValidator : Validator<Command>
     {
-        public Validator()
+        public CreateOrderValidator()
         {
             RuleFor(x => x.CustomerName)
                 .NotNull()
@@ -23,14 +23,16 @@ public static class CreateOrder
 
     public sealed class Handler : CommandHandler<Command, Response>
     {
-        public Handler()
+        public Handler(IHandlerContext context): base(context)
         {
         }
 
-        public override async Task<Response> ExecuteAsync(Command command, CancellationToken ct)
+        public override async Task<IHandlerResponse<Response>> ExecuteAsync(Command command, CancellationToken ct)
         {
             var orderId = await Task.FromResult(Guid.NewGuid());
-            return new Response(orderId, $"{command.CustomerName}");
+            var response = new Response(orderId, $"{command.CustomerName}");
+
+            return Success(response);
         }
     }
 }

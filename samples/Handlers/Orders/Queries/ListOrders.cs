@@ -5,18 +5,18 @@
 
 public static class ListOrders
 {
-    public sealed record Query() : IQuery<Response>;
+    public sealed record Query() : IQuery<IHandlerResponse<Response>>;
     public record Response(IReadOnlyCollection<OrderModel> Orders);
 
     public record OrderModel(Guid Id, string CustomerName, decimal Total);
 
     public sealed class Handler : QueryHandler<Query, Response>
     {
-        public Handler()
+        public Handler(IHandlerContext context): base(context)
         {
         }
 
-        public override async Task<Response> ExecuteAsync(Query query, CancellationToken ct)
+        public override async Task<IHandlerResponse<Response>> ExecuteAsync(Query query, CancellationToken ct)
         {
             var orders = await Task.FromResult(
                 new List<OrderModel>()
@@ -27,7 +27,7 @@ public static class ListOrders
                 }
              );
 
-            return new Response(orders);
+            return Success(new Response(orders));
         }
     }
 }
