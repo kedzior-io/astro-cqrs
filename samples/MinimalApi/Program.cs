@@ -1,5 +1,6 @@
 using AstroCqrs;
 using Handlers.Abstractions;
+using Handlers.Emails.Commands;
 using Handlers.Orders.Commands;
 using Handlers.Orders.Queries;
 using Serilog;
@@ -13,7 +14,12 @@ builder.Host.UseSerilog((hostContext, services, configuration) =>
 });
 
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+
+builder.Services.AddSwaggerGen(options =>
+{
+    options.CustomSchemaIds(type => type.ToString());
+});
+
 builder.Services.AddAuthentication().AddJwtBearer();
 builder.Services.AddAuthorization();
 builder.Services.AddCors();
@@ -34,6 +40,8 @@ app.MapGetHandler<GetOrderByCustomerId.Query, GetOrderByCustomerId.Response>("/o
 app.MapPostHandler<CreateOrder.Command, CreateOrder.Response>("/orders.create");
 
 app.MapPostHandler<ProcessOrders.Command, ProcessOrders.Response>("/orders.process");
+
+app.MapPostHandler<SendEmail.Command>("/send.email");
 
 app.MapPostHandler<GetOrderAuthorized.Query, GetOrderAuthorized.Response>("/orders.authorized")
     .RequireAuthorization();

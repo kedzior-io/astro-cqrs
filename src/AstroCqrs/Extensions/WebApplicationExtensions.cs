@@ -26,6 +26,21 @@ public static class WebApplicationExtensions
         });
     }
 
+    public static RouteHandlerBuilder MapPostHandler<TCommand>(this WebApplication app, string pattern) where TCommand : IHandlerMessage<IHandlerResponse>
+    {
+        return app.MapPost(pattern, async (TCommand? command, CancellationToken ct) =>
+        {
+            if (command is not null)
+            {
+                return await ExecuteHandlerAsync(command, ct);
+            }
+
+            var response = await HandlerExtensions.ExecuteWithEmptyMessageAsync<TCommand, IHandlerResponse>(ct);
+
+            return CreateNoContentResponse(response);
+        });
+    }
+
     private static async Task<IResult> ExecuteHandlerAsync<TResponse>(IHandlerMessage<IHandlerResponse<TResponse>> message, CancellationToken ct)
     {
         var validationResult = await ValidationExtensions.ExecuteValidationAsync(message);
@@ -40,6 +55,20 @@ public static class WebApplicationExtensions
         return CreateResponse(response);
     }
 
+    private static async Task<IResult> ExecuteHandlerAsync(IHandlerMessage<IHandlerResponse> message, CancellationToken ct)
+    {
+        var validationResult = await ValidationExtensions.ExecuteValidationAsync(message);
+
+        if (validationResult is not null)
+        {
+            return Results.ValidationProblem(validationResult, statusCode: (int)HttpStatusCode.BadRequest);
+        }
+
+        var response = await HandlerExtensions.ExecuteAsync(message, ct);
+
+        return CreateNoContentResponse(response);
+    }
+
     private static IResult CreateResponse<TResponse>(IHandlerResponse<TResponse> response)
     {
         if (response.IsFailure)
@@ -52,5 +81,19 @@ public static class WebApplicationExtensions
         }
 
         return Results.Ok(response.Payload);
+    }
+
+    private static IResult CreateNoContentResponse(IHandlerResponse response)
+    {
+        if (response.IsFailure)
+        {
+            return Results.ValidationProblem(
+                title: response.Message,
+                errors: new Dictionary<string, string[]>(),
+                statusCode: (int)HttpStatusCode.BadRequest
+            );
+        }
+
+        return Results.NoContent();
     }
 }

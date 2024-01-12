@@ -1,12 +1,14 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
-    <PackageVersion>2.0.1</PackageVersion>    
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
 	<PackageLicenseExpression>MIT</PackageLicenseExpression>
 	<PackageReadmeFile>README.md</PackageReadmeFile>
+	<PackageVersion>2.0.2</PackageVersion>
+	<Authors>Artur Kedzior</Authors>
+	<PackageDescription>Developer friendly, zero-config, high performance in-process messaging for .NET 8</PackageDescription>
   </PropertyGroup>
 
   <ItemGroup>

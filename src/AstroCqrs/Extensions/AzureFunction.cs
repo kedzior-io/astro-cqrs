@@ -17,12 +17,12 @@ public static class AzureFunction
         if (string.IsNullOrWhiteSpace(requestBody))
         {
             response = await HandlerExtensions.ExecuteWithEmptyMessageAsync<TCommand, IHandlerResponse<TResponse>>(request.FunctionContext.CancellationToken);
-            
+
             if (response.IsFailure)
             {
                 return await Failure(request, response.Message);
             }
-            
+
             return await Success(request, response);
         }
 
@@ -34,15 +34,51 @@ public static class AzureFunction
         {
             return await Failure(request, validationResult);
         }
-        
+
         response = await HandlerExtensions.ExecuteAsync(message, request.FunctionContext.CancellationToken);
 
         if (response.IsFailure)
         {
             return await Failure(request, response.Message);
         }
-        
+
         return await Success(request, response.Payload);
+    }
+
+    public static async Task<HttpResponseData> ExecuteHttpPostAsync<TCommand>(HttpRequestData request, JsonSerializerOptions jsonOptions) where TCommand : IHandlerMessage<IHandlerResponse>
+    {
+        var requestBody = await request.BodyAsync();
+        IHandlerResponse? response;
+
+        if (string.IsNullOrWhiteSpace(requestBody))
+        {
+            response = await HandlerExtensions.ExecuteWithEmptyMessageAsync<TCommand, IHandlerResponse>(request.FunctionContext.CancellationToken);
+
+            if (response.IsFailure)
+            {
+                return await Failure(request, response.Message);
+            }
+
+            return SuccessNoContent(request);
+        }
+
+        DeserializeMessage(requestBody, jsonOptions, out TCommand message);
+
+        var validationResult = await ValidationExtensions.ExecuteValidationAsync(message);
+
+        if (validationResult is not null)
+        {
+            return await Failure(request, validationResult);
+        }
+
+        response = await HandlerExtensions.ExecuteAsync(message, request.FunctionContext.CancellationToken);
+
+        if (response.IsFailure)
+        {
+            return await Failure(request, response.Message);
+        }
+
+        return SuccessNoContent(request);
     }
 
     public static async Task<HttpResponseData> ExecuteHttpGetAsync<TQuery, TResponse>(HttpRequestData request, JsonSerializerOptions jsonOptions) where TQuery : IHandlerMessage<IHandlerResponse<TResponse>>
@@ -52,12 +88,12 @@ public static class AzureFunction
         if (request.Query.Count == 0)
         {
             response = await HandlerExtensions.ExecuteWithEmptyMessageAsync<TQuery, IHandlerResponse<TResponse>>(request.FunctionContext.CancellationToken);
-            
+
             if (response.IsFailure)
             {
                 return await Failure(request, response.Message);
             }
-            
+
             return await Success(request, response);
         }
 
@@ -103,10 +139,17 @@ public static class AzureFunction
     {
         await HandlerExtensions.ExecuteWithEmptyMessageAsync<TCommand, IHandlerResponse<TResponse>>(context.CancellationToken);
     }
+
     private static async Task<HttpResponseData> Success(HttpRequestData request, object? payload)
     {
         var response = request.CreateResponse(HttpStatusCode.OK);
         await response.WriteAsJsonAsync(payload);
+        return response;
+    }
+
+    private static HttpResponseData SuccessNoContent(HttpRequestData request)
+    {
+        var response = request.CreateResponse(HttpStatusCode.NoContent);
         return response;
     }
 

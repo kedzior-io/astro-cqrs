@@ -18,3 +18,22 @@ public abstract class Handler<TMessage, TResponse> : IHandler<TMessage, IHandler
         return HandlerResponse<TResponse>.CreateError(message);
     }
 }
+
+public abstract class Handler<TMessage> : IHandler<TMessage, IHandlerResponse> where TMessage : IHandlerMessage<IHandlerResponse>
+{
+    protected Handler()
+    {
+    }
+
+    public abstract Task<IHandlerResponse> ExecuteAsync(TMessage command, CancellationToken ct = default);
+
+    protected IHandlerResponse Success()
+    {
+        return HandlerResponse.CreateEmpty();
+    }
+
+    protected IHandlerResponse Error(string message)
+    {
+        return HandlerResponse.CreateError(message);
+    }
+}
