@@ -135,6 +135,25 @@ public static class AzureFunction
         await HandlerExtensions.ExecuteAsync(message, context.CancellationToken);
     }
 
+    public static async Task ExecuteServiceBusAsync<TCommand>(string command, JsonSerializerOptions jsonOptions, FunctionContext context) where TCommand : IHandlerMessage<IHandlerResponse>
+    {
+        if (string.IsNullOrWhiteSpace(command))
+        {
+            await HandlerExtensions.ExecuteWithEmptyMessageAsync<TCommand, IHandlerResponse>(context.CancellationToken);
+        }
+
+        DeserializeMessage(command, jsonOptions, out TCommand message);
+
+        var validationResult = await ValidationExtensions.ExecuteValidationAsync(message);
+
+        if (validationResult is not null)
+        {
+            FailureWithThrow(message.GetType().FullName!, validationResult);
+        }
+
+        await HandlerExtensions.ExecuteAsync(message, context.CancellationToken);
+    }
+
     public static async Task ExecuteTimerAsync<TCommand, TResponse>(FunctionContext context) where TCommand : IHandlerMessage<IHandlerResponse<TResponse>>
     {
         await HandlerExtensions.ExecuteWithEmptyMessageAsync<TCommand, IHandlerResponse<TResponse>>(context.CancellationToken);

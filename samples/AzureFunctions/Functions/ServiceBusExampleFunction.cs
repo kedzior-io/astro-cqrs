@@ -11,6 +11,6 @@ public class ServiceBusExampleFunction
     [Function(nameof(ServiceBusExampleFunction))]
     public async Task Run([ServiceBusTrigger("order-submitted", Connection = "ConnectionStrings:ServiceBus")] string json, FunctionContext context)
     {
-        await AzureFunction.ExecuteServiceBusAsync<OrderSubmitted.Command, OrderSubmitted.Response>(json, CustomJsonOptions.Defaults, context);
+        await AzureFunction.ExecuteServiceBusAsync<OrderSubmitted.Command>(json, CustomJsonOptions.Defaults, context);
     }
 }
