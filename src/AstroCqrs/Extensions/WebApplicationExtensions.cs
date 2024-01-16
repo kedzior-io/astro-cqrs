@@ -23,7 +23,9 @@ public static class WebApplicationExtensions
             var response = await HandlerExtensions.ExecuteWithEmptyMessageAsync<TCommand, IHandlerResponse<TResponse>>(ct);
 
             return CreateResponse(response);
-        });
+        })
+        .WithTags(nameof(TCommand))
+        .WithDisplayName(nameof(TCommand));
     }
 
     public static RouteHandlerBuilder MapPostHandler<TCommand>(this WebApplication app, string pattern) where TCommand : IHandlerMessage<IHandlerResponse>
@@ -38,7 +40,9 @@ public static class WebApplicationExtensions
             var response = await HandlerExtensions.ExecuteWithEmptyMessageAsync<TCommand, IHandlerResponse>(ct);
 
             return CreateNoContentResponse(response);
-        });
+        })
+        .WithTags(nameof(TCommand))
+        .WithDisplayName(nameof(TCommand));
     }
 
     private static async Task<IResult> ExecuteHandlerAsync<TResponse>(IHandlerMessage<IHandlerResponse<TResponse>> message, CancellationToken ct)

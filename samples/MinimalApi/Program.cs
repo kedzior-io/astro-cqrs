@@ -17,7 +17,7 @@ builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.AddSwaggerGen(options =>
 {
-    options.CustomSchemaIds(type => type.ToString());
+    options.CustomSchemaIds(s => s.FullName?.Replace("+", "."));
 });
 
 builder.Services.AddAuthentication().AddJwtBearer();
