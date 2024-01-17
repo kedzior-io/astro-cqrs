@@ -3,6 +3,8 @@ using Handlers.Abstractions;
 using Handlers.Emails.Commands;
 using Handlers.Orders.Commands;
 using Handlers.Orders.Queries;
+using MinimalApi;
+using MinimalApi.BindingModels;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -45,6 +47,10 @@ app.MapPostHandler<SendEmail.Command>("/send.email");
 
 app.MapPostHandler<GetOrderAuthorized.Query, GetOrderAuthorized.Response>("/orders.authorized")
     .RequireAuthorization();
+
+// Examples of custom Minimal API binding
+
+app.AddCustomBindingExamples();
 
 app.UseCors();
 app.UseAuthentication();
