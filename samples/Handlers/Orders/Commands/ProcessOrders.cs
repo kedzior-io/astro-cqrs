@@ -11,14 +11,14 @@ public static class ProcessOrders
 
     public sealed class Handler : CommandHandler<Command, Response>
     {
-        public Handler(IHandlerContext context): base(context)
+        public Handler(IHandlerContext context) : base(context)
         {
         }
 
         public override async Task<IHandlerResponse<Response>> ExecuteAsync(Command command, CancellationToken ct)
         {
             var message = await Task.FromResult("All orders processed successfully");
-            
+
             Logger.Information("Some sample log message");
 
             var response = new Response(message);

@@ -23,7 +23,7 @@ public static class CreateOrder
 
     public sealed class Handler : CommandHandler<Command, Response>
     {
-        public Handler(IHandlerContext context): base(context)
+        public Handler(IHandlerContext context) : base(context)
         {
         }
 

@@ -6,7 +6,7 @@
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
 	<PackageLicenseExpression>MIT</PackageLicenseExpression>
 	<PackageReadmeFile>README.md</PackageReadmeFile>
-	<PackageVersion>2.0.5</PackageVersion>
+	<PackageVersion>2.0.6</PackageVersion>
 	<Authors>Artur Kedzior</Authors>
 	<PackageDescription>Developer friendly, zero-config, high performance in-process messaging for .NET 8</PackageDescription>
   </PropertyGroup>

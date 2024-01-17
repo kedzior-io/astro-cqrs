@@ -17,7 +17,7 @@ public static class GetOrderAuthorized
 
     public class Handler : QueryHandler<Query, Response>
     {
-        public Handler(IHandlerContext context): base(context)
+        public Handler(IHandlerContext context) : base(context)
         {
         }
 

@@ -17,7 +17,7 @@ public static class GetOrderById
 
     public class Handler : QueryHandler<Query, Response>
     {
-        public Handler(IHandlerContext context): base(context)
+        public Handler(IHandlerContext context) : base(context)
         {
         }
 

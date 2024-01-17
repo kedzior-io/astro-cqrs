@@ -8,7 +8,7 @@ variables:
   buildConfiguration: 'Release'
   major: '2'
   minor: '0'
-  patch: '5'
+  patch: '6'
   version: '$(major).$(minor).$(patch)'  
 
 steps:

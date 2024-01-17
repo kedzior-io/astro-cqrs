@@ -33,6 +33,7 @@ internal sealed class HandlerResponse<TResponse> : HandlerResponse, IHandlerResp
     {
         Payload = payload;
     }
+
     private HandlerResponse(string message)
     {
         IsSuccess = false;

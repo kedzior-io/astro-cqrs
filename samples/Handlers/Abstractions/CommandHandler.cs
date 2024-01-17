@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Authentication;
-using Serilog;
+﻿using Serilog;
 
 namespace Handlers.Abstractions;
 

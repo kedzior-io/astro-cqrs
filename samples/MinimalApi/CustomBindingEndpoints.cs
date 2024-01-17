@@ -1,4 +1,5 @@
 ﻿using AstroCqrs;
+using Handlers;
 using Handlers.Orders.Commands;
 using MinimalApi.BindingModels;
 

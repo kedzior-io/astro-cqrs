@@ -1,6 +1,6 @@
 ﻿namespace AstroCqrs;
 
-public abstract class MessageHandlerBase<TCommand> 
+public abstract class MessageHandlerBase<TCommand>
 { }
 
 public abstract class MessageHandler<TMessage> : MessageHandlerBase<TMessage>, IHandler<TMessage> where TMessage : IHandlerMessage

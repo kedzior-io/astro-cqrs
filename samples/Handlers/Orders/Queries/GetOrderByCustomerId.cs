@@ -16,7 +16,7 @@ public static class GetOrderByCustomerId
 
     public sealed class Handler : QueryHandler<Query, Response>
     {
-        public Handler(IHandlerContext context): base(context)
+        public Handler(IHandlerContext context) : base(context)
         {
         }
 

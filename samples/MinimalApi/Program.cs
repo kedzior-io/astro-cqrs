@@ -4,7 +4,6 @@ using Handlers.Emails.Commands;
 using Handlers.Orders.Commands;
 using Handlers.Orders.Queries;
 using MinimalApi;
-using MinimalApi.BindingModels;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -43,7 +42,8 @@ app.MapPostHandler<CreateOrder.Command, CreateOrder.Response>("/orders.create");
 
 app.MapPostHandler<ProcessOrders.Command, ProcessOrders.Response>("/orders.process");
 
-app.MapPostHandler<SendEmail.Command>("/send.email");
+app.MapPostHandler<SendEmail.Command>("/send.email")
+    .WithTags("Emails");
 
 app.MapPostHandler<GetOrderAuthorized.Query, GetOrderAuthorized.Response>("/orders.authorized")
     .RequireAuthorization();
