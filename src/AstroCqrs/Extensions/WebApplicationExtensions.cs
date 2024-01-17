@@ -24,8 +24,8 @@ public static class WebApplicationExtensions
 
             return CreateResponse(response);
         })
-        .WithTags(nameof(TCommand))
-        .WithDisplayName(nameof(TCommand));
+        .WithTags(GetTag(typeof(TCommand).FullName))
+        .WithDisplayName(typeof(TCommand).FullName ?? "");
     }
 
     public static RouteHandlerBuilder MapPostHandler<TCommand>(this WebApplication app, string pattern) where TCommand : IHandlerMessage<IHandlerResponse>
@@ -41,8 +41,25 @@ public static class WebApplicationExtensions
 
             return CreateNoContentResponse(response);
         })
-        .WithTags(nameof(TCommand))
-        .WithDisplayName(nameof(TCommand));
+        .WithTags(GetTag(typeof(TCommand).FullName))
+        .WithDisplayName(typeof(TCommand).FullName ?? "");
+    }
+
+    public static RouteHandlerBuilder MapPostHandler<TCommand>(this WebApplication app, string pattern, Delegate mapper) where TCommand : IHandlerMessage<IHandlerResponse>
+    {
+        return app.MapPost(pattern, async (TCommand? command, CancellationToken ct) =>
+        {
+            if (command is not null)
+            {
+                return await ExecuteHandlerAsync(command, ct);
+            }
+
+            var response = await HandlerExtensions.ExecuteWithEmptyMessageAsync<TCommand, IHandlerResponse>(ct);
+
+            return CreateNoContentResponse(response);
+        })
+        .WithTags(GetTag(typeof(TCommand).FullName))
+        .WithDisplayName(typeof(TCommand).FullName ?? "");
     }
 
     private static async Task<IResult> ExecuteHandlerAsync<TResponse>(IHandlerMessage<IHandlerResponse<TResponse>> message, CancellationToken ct)
@@ -99,5 +116,22 @@ public static class WebApplicationExtensions
         }
 
         return Results.NoContent();
+    }
+
+    private static string GetTag(string? handlerName)
+    {
+        if (string.IsNullOrWhiteSpace(handlerName))
+        {
+            return string.Empty;
+        }
+
+        var parts = handlerName.Split('.');
+
+        if (parts.Length < 2)
+        {
+            return string.Empty;
+        }
+
+        return parts[1];
     }
 }
