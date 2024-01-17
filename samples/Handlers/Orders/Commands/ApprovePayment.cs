@@ -3,12 +3,12 @@
 namespace Handlers.Orders.Commands;
 
 /*
- * An example of a Command with parameters mapped from both querty string {orderId} and body {reference}
+ * An example of a Command with parameters mapped from both querty string {orderId} and form data {someFormDataValue} and response
  */
 
-public static class ConfirmPayment
+public static class ApprovePayment
 {
-    public sealed record Command(string OrderId, string Reference) : ICommand<IHandlerResponse>;
+    public sealed record Command(string OrderId, string SomeFormDataValue) : ICommand<IHandlerResponse>;
 
     public sealed class OrderSubmittedValidator : Validator<Command>
     {
@@ -17,7 +17,7 @@ public static class ConfirmPayment
             RuleFor(x => x.OrderId)
                 .NotEmpty();
 
-            RuleFor(x => x.Reference)
+            RuleFor(x => x.SomeFormDataValue)
                 .NotEmpty();
         }
     }
@@ -26,7 +26,7 @@ public static class ConfirmPayment
     {
         public override async Task<IHandlerResponse> ExecuteAsync(Command command, CancellationToken ct)
         {
-            await Task.FromResult("Order payment confirmed");
+            await Task.FromResult("Payment Approved");
 
             return Success();
         }

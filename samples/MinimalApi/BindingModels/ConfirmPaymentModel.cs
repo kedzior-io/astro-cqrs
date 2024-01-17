@@ -2,11 +2,5 @@
 
 namespace MinimalApi.BindingModels;
 
-public class ConfirmPaymentModel
-{
-    [FromQuery]
-    public string Id { get; set; } = string.Empty;
-
-    [FromForm]
-    public string Reference { get; set; } = string.Empty;
-}
+public record ConfirmPaymentModel(string OrderId, [FromBody] ConfirmPaymentBodyModel Body);
+public record ConfirmPaymentBodyModel(string Reference);

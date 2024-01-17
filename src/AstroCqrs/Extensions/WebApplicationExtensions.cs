@@ -45,18 +45,31 @@ public static class WebApplicationExtensions
         .WithDisplayName(typeof(TCommand).FullName ?? "");
     }
 
-    public static RouteHandlerBuilder MapPostHandler<TCommand>(this WebApplication app, string pattern, Delegate mapper) where TCommand : IHandlerMessage<IHandlerResponse>
+    public static RouteHandlerBuilder MapPostHandler<TModel, TCommand>(this WebApplication app, string pattern, Func<TModel, TCommand> mapper) where TCommand : IHandlerMessage<IHandlerResponse>
     {
-        return app.MapPost(pattern, async (TCommand? command, CancellationToken ct) =>
+        return app.MapPost(pattern, async ([AsParameters] TModel model, CancellationToken ct) =>
         {
+            var command = mapper(model);
+            return await ExecuteHandlerAsync(command, ct);
+        })
+        .WithTags(GetTag(typeof(TCommand).FullName))
+        .WithDisplayName(typeof(TCommand).FullName ?? "");
+    }
+
+    public static RouteHandlerBuilder MapPostHandler<TModel, TCommand, TResponse>(this WebApplication app, string pattern, Func<TModel, TCommand> mapper) where TCommand : IHandlerMessage<IHandlerResponse<TResponse>>
+    {
+        return app.MapPost(pattern, async ([AsParameters] TModel model, CancellationToken ct) =>
+        {
+            var command = mapper(model);
+
             if (command is not null)
             {
                 return await ExecuteHandlerAsync(command, ct);
             }
 
-            var response = await HandlerExtensions.ExecuteWithEmptyMessageAsync<TCommand, IHandlerResponse>(ct);
+            var response = await HandlerExtensions.ExecuteWithEmptyMessageAsync<TCommand, IHandlerResponse<TResponse>>(ct);
 
-            return CreateNoContentResponse(response);
+            return CreateResponse(response);
         })
         .WithTags(GetTag(typeof(TCommand).FullName))
         .WithDisplayName(typeof(TCommand).FullName ?? "");

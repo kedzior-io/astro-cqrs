@@ -3,6 +3,7 @@ using Handlers.Abstractions;
 using Handlers.Emails.Commands;
 using Handlers.Orders.Commands;
 using Handlers.Orders.Queries;
+using MinimalApi;
 using MinimalApi.BindingModels;
 using Serilog;
 
@@ -44,13 +45,12 @@ app.MapPostHandler<ProcessOrders.Command, ProcessOrders.Response>("/orders.proce
 
 app.MapPostHandler<SendEmail.Command>("/send.email");
 
-app.MapPostHandler<ConfirmPayment.Command>("/orders.payments.confirm.{id}", (ConfirmPaymentModel model) =>
-{
-    return new ConfirmPayment.Command(model.Id, model.Reference);
-});
-
 app.MapPostHandler<GetOrderAuthorized.Query, GetOrderAuthorized.Response>("/orders.authorized")
     .RequireAuthorization();
+
+// Examples of custom Minimal API binding
+
+app.AddCustomBindingExamples();
 
 app.UseCors();
 app.UseAuthentication();
