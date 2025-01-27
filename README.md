@@ -5,17 +5,17 @@
 ![Astro.CQRS](https://raw.githubusercontent.com/kedzior-io/astro-cqrs/main/astrocqrs.jpg)
 
 
-Astro CQRS is a developer friendly alternative mediator implementation to [MediatR](https://github.com/jbogard/MediatR).
+A clean, modern implementation of CQRS (Command Query Responsibility Segregation) and Vertical Slice Architecture, designed to simplify and scale application development in .NET.
 
-In-process messaging with no dependencies that allows to take decoupled, command driven approach.
+Quite possibly the easiest and most beginner-friendly implementation out there.
 
 It is designed to be used with:
 
-- .NET 8
+- .NET 9
 - Minimal API
 - Azure Functions (HttpTrigger, ServiceBusTrigger and TimeTrigger)
+- Console app
 - Blazor (todo)
-- Console app (todo)
 - MVC (todo)
 
 ## Usage
