@@ -184,6 +184,8 @@ The handler always returns three types of responses, which enforce consistency:
 
 Check [samples](https://github.com/kedzior-io/astro-cqrs/tree/main/samples) available in this repo. 
 
+Also check a solution template here: [Astro Architecture](https://github.com/kedzior-io/astro-architecture).
+
 ## Motives
 
 I'm a big fan of:
