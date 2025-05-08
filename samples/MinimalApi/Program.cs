@@ -3,6 +3,7 @@ using Handlers.Abstractions;
 using Handlers.Emails.Commands;
 using Handlers.Orders.Commands;
 using Handlers.Orders.Queries;
+using Handlers.Users.Commands;
 using MinimalApi;
 using Serilog;
 
@@ -47,6 +48,10 @@ app.MapPostHandler<SendEmail.Command>("/send.email")
 
 app.MapPostHandler<GetOrderAuthorized.Query, GetOrderAuthorized.Response>("/orders.authorized")
     .RequireAuthorization();
+
+app.MapPutHandler<UpdateUser.Command, UpdateUser.Response>("/user.update");
+
+app.MapDeleteHandler<DeleteUser.Command>("/user.delete");
 
 // Examples of custom Minimal API binding
 

@@ -16,10 +16,7 @@ var loggerConfiguration = new LoggerConfiguration()
 var logger = loggerConfiguration.CreateLogger();
 
 var host = new HostBuilder()
-    .ConfigureFunctionsWorkerDefaults(builder =>
-    {
-        builder.Serializer = new JsonObjectSerializer(CustomJsonOptions.Defaults);
-    })
+    .ConfigureFunctionsWebApplication()
     .ConfigureServices(services =>
     {
         services.AddSingleton<ILogger>(_ => logger);
@@ -27,7 +24,12 @@ var host = new HostBuilder()
 
         // TODO: Looking for a better way to find and register handlers
         services.AddAstroCqrsFromAssemblyContaining<ListOrders.Query>();
+
+        services.Configure<WorkerOptions>(workerOptions =>
+        {
+            workerOptions.Serializer = new JsonObjectSerializer(CustomJsonOptions.Defaults);
+        });
     })
     .Build();
 
-host.Run();
+await host.RunAsync();
