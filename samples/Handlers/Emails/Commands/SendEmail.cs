@@ -6,10 +6,12 @@
 
 public static class SendEmail
 {
-    public sealed class Command : ICommand<IHandlerResponse>
+    public record Command : ICommand<IHandlerResponse>
     {
-        public record EmailModel(string TemplateId, string ReceiverEmail, string Subject, object Content);
+        public EmailModel? EmailModel { get; set; }
     }
+
+    public record EmailModel(string TemplateId, string ReceiverEmail, string Subject, object Content);
 
     public sealed class Handler(IHandlerContext context/*, IEmailProvider emailProvider*/) : CommandHandler<Command>(context)
     {

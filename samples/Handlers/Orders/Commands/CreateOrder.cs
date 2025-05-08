@@ -8,8 +8,8 @@ namespace Handlers.Orders.Commands;
 
 public static class CreateOrder
 {
-    public sealed record Command(string CustomerName, decimal Total) : ICommand<IHandlerResponse<Response>>;
-    public sealed record Response(Guid OrderId, string SomeValue);
+    public record Command(string CustomerName, decimal Total) : ICommand<IHandlerResponse<Response>>;
+    public record Response(Guid OrderId, string SomeValue);
 
     public sealed class CreateOrderValidator : Validator<Command>
     {
