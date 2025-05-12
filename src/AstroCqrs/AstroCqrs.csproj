@@ -1,14 +1,14 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net9.0</TargetFramework>
+    <TargetFrameworks>net8.0;net9.0</TargetFrameworks>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageReadmeFile>README.md</PackageReadmeFile>
-    <PackageVersion>3.0.0</PackageVersion>
+    <PackageVersion>3.0.2</PackageVersion>
     <Authors>Artur Kedzior</Authors>
-    <PackageDescription>Developer friendly, zero-config, high performance in-process messaging for .NET 8</PackageDescription>
+    <PackageDescription>AstroCqrs is a clean, modern implementation of CQRS (Command Query Responsibility Segregation) and Vertical Slice Architecture for .NET. It’s designed to simplify application development with minimal boilerplate and clear, consistent patterns.</PackageDescription>
   </PropertyGroup>
   <ItemGroup>
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
