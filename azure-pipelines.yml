@@ -39,7 +39,12 @@ steps:
       versionEnvVar: version
       configuration: $(buildConfiguration)
       includesymbols: false
-      outputDir: '$(Build.ArtifactStagingDirectory)'      
+      outputDir: '$(Build.ArtifactStagingDirectory)'
+      
+  - script: |
+      sudo apt update
+      sudo apt install -y mono-complete
+    displayName: 'install mono'      
 
   - task: NuGetCommand@2
     displayName: "nuget push"    
