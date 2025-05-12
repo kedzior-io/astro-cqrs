@@ -4,8 +4,7 @@
 
 https://www.nuget.org/packages/AstroCqrs
 
-![Astro.CQRS](https://raw.githubusercontent.com/kedzior-io/astro-cqrs/main/astrocqrs.jpg)
-
+![Astro.CQRS](astrocqrs_small.png)
 
 A clean, modern implementation of CQRS (Command Query Responsibility Segregation) and Vertical Slice Architecture, designed to simplify and scale application development in .NET.
 
