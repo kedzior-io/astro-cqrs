@@ -1,4 +1,4 @@
-using AstroCqrs;
+using MinimalCqrs;
 using Handlers.Abstractions;
 using Handlers.Emails.Commands;
 using Handlers.Orders.Commands;
@@ -27,7 +27,7 @@ builder.Services.AddAuthorization();
 builder.Services.AddCors();
 builder.Services.AddScoped<IHandlerContext, HandlerContext>();
 
-builder.Services.AddAstroCqrs();
+builder.Services.AddMinimalCqrs();
 
 var app = builder.Build();
 

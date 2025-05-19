@@ -5,7 +5,7 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\src\AstroCqrs\AstroCqrs.csproj" />
+    <ProjectReference Include="..\..\src\MinimalCqrs\MinimalCqrs.csproj" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Serilog" Version="3.1.1" />

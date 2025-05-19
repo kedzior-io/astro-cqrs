@@ -34,7 +34,7 @@ steps:
     displayName: "pack"  
     inputs:
       command: 'pack'
-      packagesToPack: '**/AstroCqrs.csproj'
+      packagesToPack: '**/MinimalCqrs.csproj'
       versioningScheme: byEnvVar
       versionEnvVar: version
       configuration: $(buildConfiguration)
