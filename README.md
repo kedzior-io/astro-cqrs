@@ -1,10 +1,13 @@
 # Minimal CQRS
 
-![Nuget](https://img.shields.io/nuget/v/MinimalCqrs?link=https%3A%2F%2Fwww.nuget.org%2Fpackages%2FMinimalCqrs%2F) [![Build Status](https://dev.azure.com/isready/astro-cqrs/_apis/build/status%2Fkedzior-io.astro-cqrs?branchName=main)](https://dev.azure.com/isready/astro-cqrs/_build/latest?definitionId=16&branchName=main)
+Formerly known as ```AstroCQRS```. 
+
+[![NuGet](https://img.shields.io/nuget/v/MinimalCqrs.svg)](https://www.nuget.org/packages/MinimalCqrs/) [![Build Status](https://dev.azure.com/isready/minimal-cqrs/_apis/build/status%2Fkedzior-io.minimal-cqrs?branchName=main)](https://dev.azure.com/isready/minimal-cqrs/_build/latest?definitionId=19&branchName=main)
+
 
 https://www.nuget.org/packages/MinimalCqrs
 
-![Minimal.CQRS](minimal_cqrs_logo_small.png)
+![Minimal.CQRS](https://github.com/kedzior-io/minimal-cqrs/blob/main/minimal_cqrs_logo_small.png)
 
 A clean, modern implementation of CQRS (Command Query Responsibility Segregation) and Vertical Slice Architecture, designed to simplify and scale application development in .NET.
 
