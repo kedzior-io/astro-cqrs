@@ -6,9 +6,9 @@ pool:
 
 variables:
   buildConfiguration: 'Release'
-  major: '3'
+  major: '4'
   minor: '0'
-  patch: '2'
+  patch: '0'
   version: '$(major).$(minor).$(patch)'  
 
 steps:
@@ -34,7 +34,7 @@ steps:
     displayName: "pack"  
     inputs:
       command: 'pack'
-      packagesToPack: '**/AstroCqrs.csproj'
+      packagesToPack: '**/MinimalCqrs.csproj'
       versioningScheme: byEnvVar
       versionEnvVar: version
       configuration: $(buildConfiguration)

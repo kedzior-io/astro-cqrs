@@ -1,10 +1,10 @@
 # Minimal CQRS
 
-![Nuget](https://img.shields.io/nuget/v/AstroCQRS?link=https%3A%2F%2Fwww.nuget.org%2Fpackages%2FAstroCqrs%2F) [![Build Status](https://dev.azure.com/isready/astro-cqrs/_apis/build/status%2Fkedzior-io.astro-cqrs?branchName=main)](https://dev.azure.com/isready/astro-cqrs/_build/latest?definitionId=16&branchName=main)
+![Nuget](https://img.shields.io/nuget/v/MinimalCqrs?link=https%3A%2F%2Fwww.nuget.org%2Fpackages%2FMinimalCqrs%2F) [![Build Status](https://dev.azure.com/isready/astro-cqrs/_apis/build/status%2Fkedzior-io.astro-cqrs?branchName=main)](https://dev.azure.com/isready/astro-cqrs/_build/latest?definitionId=16&branchName=main)
 
-https://www.nuget.org/packages/AstroCqrs
+https://www.nuget.org/packages/MinimalCqrs
 
-![Minimal.CQRS](astrocqrs_small.png)
+![Minimal.CQRS](minimal_cqrs_logo_small.png)
 
 A clean, modern implementation of CQRS (Command Query Responsibility Segregation) and Vertical Slice Architecture, designed to simplify and scale application development in .NET.
 
@@ -12,7 +12,7 @@ Quite possibly the easiest and most beginner-friendly implementation out there.
 
 It is designed to be used with:
 
-- .NET 9
+- .NET 9 & .NET 8
 - Minimal API
 - Azure Functions (HttpTrigger, ServiceBusTrigger and TimeTrigger)
 - Console app
@@ -24,14 +24,14 @@ It is designed to be used with:
 1. Install:
 
 ```csharp
-dotnet add package AstroCqrs  
+dotnet add package MinimalCqrs  
 ```
 
 
 2. Configure :
 
 ```csharp
-builder.Services.AddAstroCqrs();
+builder.Services.AddMinimalCqrs();
 ```
 
 ## Query
@@ -135,7 +135,7 @@ public static class CreateOrder
 Here are the same query and command used in Azure Functions!
 
 ```csharp
-services.AddAstroCqrsFromAssemblyContaining<ListOrders.Query>();
+services.AddMinimalCqrsFromAssemblyContaining<ListOrders.Query>();
 ```
 
 ☝️ Ah yeah, due to the nature of Azure Functions, we need to point to the assembly where the handlers live

@@ -1,2 +1,2 @@
-global using AstroCqrs;
+global using MinimalCqrs;
 global using Handlers.Abstractions;
