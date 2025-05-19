@@ -1,4 +1,4 @@
-﻿using AstroCqrs;
+﻿using MinimalCqrs;
 using Handlers.Abstractions;
 using Handlers.Orders.Commands;
 using Handlers.Orders.Queries;
@@ -9,7 +9,7 @@ using Serilog.Events;
 
 await RegisterServices(args);
 
-Console.WriteLine("Hello AstroCQRS User!");
+Console.WriteLine("Hello MinimalCqrs User!");
 
 Console.WriteLine("");
 Console.WriteLine("1.Run Query");
@@ -60,7 +60,7 @@ static async Task RegisterServices(string[] args)
     builder.Services.AddSingleton<ILogger>(_ => logger);
     builder.Services.AddSerilog();
     builder.Services.AddScoped<IHandlerContext, HandlerContext>();
-    builder.Services.AddAstroCqrsFromAssemblyContaining<ListOrders.Query>();
+    builder.Services.AddMinimalCqrsFromAssemblyContaining<ListOrders.Query>();
 
     var host = builder.Build();
     await host.StartAsync();
