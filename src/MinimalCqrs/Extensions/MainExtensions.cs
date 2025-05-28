@@ -45,6 +45,7 @@ public static class MainExtensions
                                         {
                                             Types.IQuery,
                                             Types.ICommand,
+                                            Types.IEvent,
                                             Types.IMessageHandler,
                                             Types.IValidator
                                         }).Any()
@@ -71,8 +72,6 @@ public static class MainExtensions
                 }
             }
         }
-
-        // TODO: check the performance of this
 
         var serviceProvider = services.BuildServiceProvider();
 

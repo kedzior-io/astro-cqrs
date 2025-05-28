@@ -37,3 +37,12 @@ public abstract class Handler<TMessage> : IHandler<TMessage, IHandlerResponse> w
         return HandlerResponse.CreateError(message);
     }
 }
+
+public abstract class EventHandler<TMessage> : IHandler<TMessage> where TMessage : IHandlerMessage
+{
+    protected EventHandler()
+    {
+    }
+
+    public abstract Task ExecuteAsync(TMessage command, CancellationToken ct = default);
+}
