@@ -6,14 +6,10 @@ namespace MinimalCqrs;
 
 public static class WebApplicationExtensions
 {
-    // GET
-
     public static RouteHandlerBuilder MapGetHandler<TQuery, TResponse>(this WebApplication app, string pattern) where TQuery : IHandlerMessage<IHandlerResponse<TResponse>>
     {
         return app.MapGet(pattern, async ([AsParameters] TQuery query, CancellationToken ct) => await ExecuteHandlerAsync(query, ct));
     }
-
-    // POST
 
     public static RouteHandlerBuilder MapPostHandler<TCommand, TResponse>(this WebApplication app, string pattern) where TCommand : IHandlerMessage<IHandlerResponse<TResponse>>
     {
@@ -71,7 +67,6 @@ public static class WebApplicationExtensions
         });
     }
 
-    // PUT
     public static RouteHandlerBuilder MapPutHandler<TCommand, TResponse>(this WebApplication app, string pattern) where TCommand : IHandlerMessage<IHandlerResponse<TResponse>>
     {
         return app.MapPut(pattern, async (TCommand? command, CancellationToken ct) =>
@@ -127,8 +122,6 @@ public static class WebApplicationExtensions
             return CreateResponse(response);
         });
     }
-
-    // DELETE
 
     public static RouteHandlerBuilder MapDeleteHandler<TCommand, TResponse>(this WebApplication app, string pattern) where TCommand : IHandlerMessage<IHandlerResponse<TResponse>>
     {

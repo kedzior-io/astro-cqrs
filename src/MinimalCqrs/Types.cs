@@ -6,6 +6,7 @@ internal static class Types
 {
     internal static readonly Type IQuery = typeof(IQuery);
     internal static readonly Type ICommand = typeof(ICommand);
+    internal static readonly Type IEvent = typeof(IEvent);
 
     internal static readonly Type IMessageHandler = typeof(IHandler);
     internal static readonly Type IMessageHandlerOf1 = typeof(IHandler<>);

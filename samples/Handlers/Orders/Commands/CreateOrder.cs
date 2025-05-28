@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using static Handlers.Orders.Events.OrderCreated;
 
 namespace Handlers.Orders.Commands;
 
@@ -31,6 +32,9 @@ public static class CreateOrder
         {
             var orderId = await Task.FromResult(Guid.NewGuid());
             var response = new Response(orderId, $"{command.CustomerName}");
+
+            var myEvent = new Event(command.CustomerName);
+            await EventBus.PublishAsync(myEvent, ct);
 
             return Success(response);
         }
